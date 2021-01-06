@@ -1,3 +1,5 @@
+// Create an algorithm that will transform a numeric grade system to a letter grade system
+
 function gradeSwitcherWithIf(grade) {
     if (grade >= 90 && grade <= 100) {
         grade = "A"

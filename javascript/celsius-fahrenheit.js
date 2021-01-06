@@ -1,3 +1,5 @@
+// Create a function that receives a string in Celsius or Fahrenheit and transforms it from one unit to other
+
 function convertCelsiusAndFahrenheit(temperature) {
     const celsiusExists = temperature.toUpperCase().includes("C")
     const fahrenheitExists = temperature.toUpperCase().includes("F")

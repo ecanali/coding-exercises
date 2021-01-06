@@ -1,3 +1,5 @@
+// Create a function that will calculate the balance from a given family cash flow, then show the results
+
 const familyCashFlow = {
     incomes: [1100, 500, 200, 100, 100],
     expenses: [250, 550, 100, 50, 550]
