@@ -5,6 +5,7 @@ const familyCashFlow = {
     expenses: [250, 550, 100, 50, 550]
 }
 
+// Separates the sum function from the main function
 function sumEntries(entriesArray) {
     let total = 0
 
