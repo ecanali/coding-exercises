@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+        <link href="styles.css" rel="stylesheet">
+        <title>Trivia!</title>
+
+        <script>
+
+            // TODO: Add code to check answers to questions
+            document.addEventListener('DOMContentLoaded', (event) => {
+                const allButtons = document.querySelectorAll('.buttons button')
+                const responseText = document.querySelector('.response')
+
+                allButtons.forEach((button) => {
+                    button.addEventListener('click', (event) => {
+                        allButtons.forEach((button) => {
+                            button.style.backgroundColor = "initial"
+                        })
+                        if (button.value == 'correct') {
+                            button.style.backgroundColor = '#bcf7cd'
+                            responseText.innerHTML = "Correct!"
+                        } else {
+                            button.style.backgroundColor = '#e08989'
+                            responseText.innerHTML = "Incorrect!"
+                        }
+                    })
+                })
+            })
+        </script>
+
+    </head>
+    <body>
+
+        <div class="jumbotron">
+            <h1>Trivia!</h1>
+        </div>
+
+        <div class="container">
+
+            <div class="section">
+                <h2>Part 1: Multiple Choice </h2>
+                <hr>
+
+                <!-- TODO: Add multiple choice question here -->
+                <h3>What is the approximate ratio of people to sheep in New Zealand?</h3>
+                <h4 class="response"></h4>
+                <div class="buttons">
+                    <button type="submit">6 people per 1 sheep</button>
+                    <button type="submit">3 people per 1 sheep</button>
+                    <button type="submit">1 person per 1 sheep</button>
+                    <button type="submit">1 person per 3 sheep</button>
+                    <button type="submit" value="correct">1 person per 6 sheep</button>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>Part 2: Free Response</h2>
+                <hr>
+
+                <!-- TODO: Add free response question here -->
+                <h3>In which country is it illegal to own only one guinea pig, as a lone guinea pig might get lonely?</h3>
+                <form onsubmit="">
+                    <input type="text" name="response">
+                    <button type="submit">Check Answer</button>
+                </form>
+
+            </div>
+
+        </div>
+    </body>
+</html>
