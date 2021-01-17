@@ -9,9 +9,8 @@
         <script>
 
             // TODO: Add code to check answers to questions
-            document.addEventListener('DOMContentLoaded', (event) => {
+            document.addEventListener('DOMContentLoaded', function() {
                 const allButtons = document.querySelectorAll('.buttons button')
-                const responseText = document.querySelector('.response')
 
                 allButtons.forEach((button) => {
                     button.addEventListener('click', (event) => {
@@ -20,14 +19,27 @@
                         })
                         if (button.value == 'correct') {
                             button.style.backgroundColor = '#bcf7cd'
-                            responseText.innerHTML = "Correct!"
+                            document.querySelector('.response1').innerHTML = "Correct!"
                         } else {
                             button.style.backgroundColor = '#e08989'
-                            responseText.innerHTML = "Incorrect!"
+                            document.querySelector('.response1').innerHTML = "Incorrect!"
                         }
                     })
                 })
+
+                document.querySelector('#textSubmitButton').addEventListener('click', function() {
+                    const textInputField = document.querySelector('[name="textResponse"]')
+
+                    if (textInputField.value === "Switzerland" || textInputField.value === "switzerland") {
+                        textInputField.style.backgroundColor = '#bcf7cd'
+                        document.querySelector('.response2').innerHTML = "Correct!"
+                    } else {
+                        textInputField.style.backgroundColor = '#e08989'
+                        document.querySelector('.response2').innerHTML = "Incorrect!"
+                    }
+                })
             })
+
         </script>
 
     </head>
@@ -45,7 +57,7 @@
 
                 <!-- TODO: Add multiple choice question here -->
                 <h3>What is the approximate ratio of people to sheep in New Zealand?</h3>
-                <h4 class="response"></h4>
+
                 <div class="buttons">
                     <button type="submit">6 people per 1 sheep</button>
                     <button type="submit">3 people per 1 sheep</button>
@@ -53,6 +65,9 @@
                     <button type="submit">1 person per 3 sheep</button>
                     <button type="submit" value="correct">1 person per 6 sheep</button>
                 </div>
+
+                <h4 class="response1"></h4>
+
             </div>
 
             <div class="section">
@@ -61,10 +76,11 @@
 
                 <!-- TODO: Add free response question here -->
                 <h3>In which country is it illegal to own only one guinea pig, as a lone guinea pig might get lonely?</h3>
-                <form onsubmit="">
-                    <input type="text" name="response">
-                    <button type="submit">Check Answer</button>
-                </form>
+
+                <input type="text" name="textResponse">
+                <button id="textSubmitButton" type="button">Check Answer</button>
+
+                <h4 class="response2"></h4>
 
             </div>
 
