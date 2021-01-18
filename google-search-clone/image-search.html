@@ -1,25 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <link rel="stylesheet" href="style.css">
-        <title>Search</title>
+        <link href="style.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <title>Images Search</title>
     </head>
     <body>
-        <div class="content">
-            <header>
-                <nav>
-                    <a href="index.html">General Search</a>
-                    <a href="image-search.html">Image Search</a>
-                    <a href="advanced-search.html">Advanced Search</a>
-                </nav>
-            </header>
-            <main>
+        <header>
+            <nav>
+                <a href="index.html">General Search</a>
+                <a href="image-search.html">Images Search</a>
+                <a href="advanced-search.html">Advanced Search</a>
+            </nav>
+        </header>            
+        <main>
+            <div class="logo">
                 <img src="google-logo.png" alt="Google's logo">
-                <form action="https://google.com/search">
-                    <input type="text" name="q">
-                    <input type="submit" value="Image Search">
-                </form>
-            </main>
-        </div>
+                <span class="logo-title">images</span>
+            </div>
+            <form action="https://google.com/search">
+                <input type="text" name="q" autofocus>
+                <input type="hidden" name="tbm" value="isch">
+                <span class="material-icons search">search</span>
+                <span class="material-icons camera" title="Search by image">camera_alt</span>
+                <span class="material-icons mic" title="Search by voice">mic</span>
+                <input type="submit" value="Images Search">
+            </form>
+        </main>
     </body>
 </html>

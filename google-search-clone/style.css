@@ -33,23 +33,26 @@ main {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 15vh auto;
+    margin: 11vh auto;
 }
 
-main img {
+main div.logo img {
     width: 272px;
-    margin-bottom: 24px;
+    margin-bottom: 27px;
 }
 
 main form {
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: relative;
 }
 
 form input[type="text"] {
-    width: 560px;
+    width: 574px;
     height: 44px;
+    padding: 0 44px;
+    font-size: 16px;
     border: 1px solid #dfe1e5;
     border-radius: 24px;
     outline: none;
@@ -78,4 +81,42 @@ form input[type="submit"] {
 form input[type="submit"]:hover {
     box-shadow: 0 1px 6px rgba(32,33,36,.28);
     border-color: rgba(223,225,229,0);
+}
+
+form span.material-icons.search {
+    color: #9aa0a6;
+    font-size: 20px;
+    position: absolute;
+    left: 12px;
+    top: 12px;
+}
+
+form span.material-icons.mic {
+    color: rgb(66, 133, 244);
+    font-size: 24px;
+    position: absolute;
+    right: 16px;
+    top: 10px;
+    cursor: pointer;
+}
+
+form span.material-icons.camera {
+    color: rgba(0, 0, 0, 0.55);
+    font-size: 24px;
+    position: absolute;
+    right: 54px;
+    top: 10px;
+    cursor: pointer;
+}
+
+main span.logo-title {
+    color: #4285f4;
+    font: 16px roboto-regular, arial, sans-serif;
+    right: 5px;
+    top: 75px;
+    position: absolute;
+}
+
+div.logo {
+    position: relative;
 }
