@@ -19,29 +19,25 @@
         <main class="advanced-search-main">
             <h1>Advanced Search</h1>
             <div class="line"></div>
-            <form action="https://google.com/search">
-                <div class="fields-descriptions">
-                    <h2>Find pages with...</h2>
-                    <!-- <h3>To do this in the search box.</h3> -->
-                </div>
-                <div class="form-item">
+            <form action="https://google.com/search" autocomplete="off">
+                <h2>Find pages with...</h2>
+                <div>
                     <label for="all-words">all these words:</label>
-                    <input id="all-words" type="text" name="q" autofocus>
+                    <input id="all-words" type="text" name="as_q" autofocus>
                 </div>
-                <div class="form-item">
+                <div>
                     <label for="exact-word">this exact word or phrase:</label>
-                    <input id="exact-word" type="text" name="q">
+                    <input id="exact-word" type="text" name="as_epq">
                 </div>
-                <div class="form-item">
+                <div>
                     <label for="any-words">any of these words:</label>
-                    <input id="any-words" type="text" name="q">
+                    <input id="any-words" type="text" name="as_oq">
                 </div>
-                <div class="form-item">
+                <div>
                     <label for="none-words">none of these words:</label>
-                    <input id="none-words" type="text" name="q">
+                    <input id="none-words" type="text" name="as_eq">
                 </div>
-
-                <input type="submit" value="Advanced Search">
+                <input class="advanced-search" type="submit" value="Advanced Search">
             </form>
         </main>
     </body>

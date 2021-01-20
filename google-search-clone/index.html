@@ -17,11 +17,14 @@
             <div class="logo">
                 <img src="google-logo.png" alt="Google's logo">
             </div>
-            <form action="https://google.com/search">
+            <form action="https://google.com/search" autocomplete="off">
                 <input type="text" name="q" autofocus>
                 <span class="material-icons search">search</span>
                 <span class="material-icons mic" title="Search by voice">mic</span>
-                <input type="submit" value="Google Search">
+                <div class="search-buttons">
+                    <input type="submit" value="Google Search">
+                    <input type="submit" name="btnI" value="I'm Feeling Lucky!">
+                </div>
             </form>
         </main>
     </body>

@@ -83,6 +83,11 @@ form input[type="submit"]:hover {
     border-color: rgba(223,225,229,0);
 }
 
+form input[type="submit"]:focus {
+    outline: 1px solid #357ae8;
+    border-radius: 4px;
+}
+
 form span.material-icons.search {
     color: #9aa0a6;
     font-size: 20px;
@@ -155,11 +160,6 @@ main.advanced-search-main h1 {
 main.advanced-search-main div.line {
     border-bottom: 1px solid #ebebeb;
     width: 100%;
-    /* right: 0;
-    left: 0;
-    top: 20px;
-    margin: 0; */
-    /* position: absolute; */
 }
 
 main.advanced-search-main form {
@@ -199,5 +199,28 @@ main.advanced-search-main form label {
     color: #222;
 }
 
+form input[type="submit"].advanced-search {
+    background-color: #4d90fe;
+    border: 1px solid #3079ed;
+    border-radius: 2px;
+    color: #fff;
+    font-size: 11px;
+    font-weight: bold;
+    margin: 10px 0;
+    padding: 0 12px;
+    height: 30px;
+    min-width: 120px;
+    text-align: center;
+    cursor: pointer;
+    align-self: flex-end;
+}
 
+form input[type="submit"].advanced-search:hover {
+    background-color: #357ae8;
+    border: 1px solid #2f5bb7;
+    box-shadow: none;
+}
 
+main.advanced-search-main form input[type="text"]:focus {
+    border: 1px solid #357ae8;
+}
