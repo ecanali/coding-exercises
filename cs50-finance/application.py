@@ -1,4 +1,5 @@
 import os
+import cs50
 
 from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session
@@ -15,7 +16,6 @@ app = Flask(__name__)
 # Ensure templates are auto-reloaded
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
-
 # Ensure responses aren't cached
 @app.after_request
 def after_request(response):
@@ -23,7 +23,6 @@ def after_request(response):
     response.headers["Expires"] = 0
     response.headers["Pragma"] = "no-cache"
     return response
-
 
 # Custom filter
 app.jinja_env.filters["usd"] = usd
@@ -120,7 +119,45 @@ def quote():
 @app.route("/register", methods=["GET", "POST"])
 def register():
     """Register user"""
-    return apology("TODO")
+
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
+        confirmation = request.form.get("confirmation")
+
+        # Ensure username was submitted
+        if not username:
+            return apology("must provide username", 403)
+
+        # Ensure password and confirmation were submitted
+        elif not password or not confirmation:
+            return apology("must provide both password and confirmation", 403)
+
+        # Ensure passwords match
+        elif not password == confirmation:
+            return apology("passwords do not match", 403)  
+
+        # Query database for username
+        rows = db.execute("SELECT * FROM users WHERE username = ?", username)
+
+        # Ensure username not exists
+        if len(rows) >= 1:
+            return apology("invalid username, it already exists", 403)
+
+        # Generate password hash and save new user to database
+        else:
+            hash = generate_password_hash(password, method='pbkdf2:sha256', salt_length=8)
+            db.execute("INSERT INTO users (username, hash) VALUES(?, ?)", username, hash)
+
+        # Redirect user to login page
+            return redirect("/login")
+
+    else:
+        return render_template("register.html")
+
+    # return apology("TODO")
+    # return render_template("register.html")
+
 
 
 @app.route("/sell", methods=["GET", "POST"])
