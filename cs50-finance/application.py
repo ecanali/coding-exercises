@@ -52,7 +52,30 @@ def index():
 @login_required
 def buy():
     """Buy shares of stock"""
-    return apology("TODO")
+    if request.method == "POST":
+        symbol = request.form.get("symbol")
+        shares = int(request.form.get("shares"))
+        if not symbol:
+            return apology("missing symbol", 400)
+        if not shares:
+            return apology("missing shares", 400)
+        if shares <= 0:
+            return apology("invalid shares", 400)
+        quote = lookup(symbol)
+        if quote == None:
+            return apology("invalid symbol", 400)
+        else:
+            current_price = quote["price"]
+            user_cash = db.execute("SELECT users.cash FROM users WHERE id = ?", session["user_id"])[0]["cash"]
+            remainder_cash = user_cash - (shares * current_price)
+            if remainder_cash < 0:
+                return apology("can't afford", 400)
+            else:
+                # update database new user cash
+                db.execute("UPDATE users SET cash = ? WHERE id = ?", remainder_cash, session["user_id"])
+                return redirect("/buy")
+    else:
+        return render_template("buy.html")
 
 
 @app.route("/history")
@@ -113,13 +136,22 @@ def logout():
 @login_required
 def quote():
     """Get stock quote."""
-    return apology("TODO")
+    if request.method == "POST":
+        symbol = request.form.get("symbol")
+        if not symbol:
+            return apology("missing symbol", 400)
+        quote = lookup(symbol)
+        if quote == None:
+            return apology("invalid symbol", 400)
+        else:
+            return render_template("quoted.html", quote=quote)
+    else:
+        return render_template("quote.html")
 
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
     """Register user"""
-
     if request.method == "POST":
         username = request.form.get("username")
         password = request.form.get("password")
@@ -154,10 +186,6 @@ def register():
 
     else:
         return render_template("register.html")
-
-    # return apology("TODO")
-    # return render_template("register.html")
-
 
 
 @app.route("/sell", methods=["GET", "POST"])
