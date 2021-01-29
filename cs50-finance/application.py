@@ -45,7 +45,25 @@ if not os.environ.get("API_KEY"):
 @login_required
 def index():
     """Show portfolio of stocks"""
-    return apology("TODO")
+    shares = db.execute("SELECT *, SUM(shares) FROM history WHERE user_id = ? GROUP BY symbol", session["user_id"])
+    user_cash = db.execute("SELECT users.cash FROM users WHERE id = ?", session["user_id"])[0]["cash"]
+    # update to current value each share unit of each symbol
+    display = []
+    for stock in shares:
+        current_price = lookup(stock["symbol"])
+        total = stock["SUM(shares)"] * current_price["price"]
+        data = {}
+        data["symbol"] = current_price["symbol"]
+        data["name"] = current_price["name"]
+        data["shares"] = stock["SUM(shares)"]
+        data["price"] = current_price["price"]
+        data["total"] = total
+        display.append(data)
+    
+    print(display)
+
+    return render_template("index.html", display=display)
+    # return apology("TODO")
 
 
 @app.route("/buy", methods=["GET", "POST"])
@@ -71,9 +89,9 @@ def buy():
             if remainder_cash < 0:
                 return apology("can't afford", 400)
             else:
-                # update database new user cash
                 db.execute("UPDATE users SET cash = ? WHERE id = ?", remainder_cash, session["user_id"])
-                return redirect("/buy")
+                db.execute("INSERT INTO history (symbol, shares, price, user_id) VALUES(?, ?, ?, ?)", quote["symbol"], shares, current_price, session["user_id"])
+                return redirect("/")
     else:
         return render_template("buy.html")
 
