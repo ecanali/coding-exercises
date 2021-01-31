@@ -49,6 +49,12 @@ main img
 table {
     text-align: left;
     border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+tbody tr:nth-child(odd) {
+    background-color: rgba(0,0,0,.05);
 }
 
 table td, table th {

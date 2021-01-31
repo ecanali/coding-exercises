@@ -45,25 +45,34 @@ if not os.environ.get("API_KEY"):
 @login_required
 def index():
     """Show portfolio of stocks"""
-    shares = db.execute("SELECT *, SUM(shares) FROM history WHERE user_id = ? GROUP BY symbol", session["user_id"])
+    user_stocks = db.execute("SELECT symbol, SUM(shares) AS total_shares FROM history WHERE user_id = ? GROUP BY symbol", session["user_id"])
     user_cash = db.execute("SELECT users.cash FROM users WHERE id = ?", session["user_id"])[0]["cash"]
-    # update to current value each share unit of each symbol
-    display = []
-    for stock in shares:
-        current_price = lookup(stock["symbol"])
-        total = stock["SUM(shares)"] * current_price["price"]
-        data = {}
-        data["symbol"] = current_price["symbol"]
-        data["name"] = current_price["name"]
-        data["shares"] = stock["SUM(shares)"]
-        data["price"] = current_price["price"]
-        data["total"] = total
-        display.append(data)
-    
-    print(display)
 
-    return render_template("index.html", display=display)
-    # return apology("TODO")
+    # Update to current value each share unit of each symbol
+    updated_portfolio = []
+    for stock in user_stocks:
+        updated_stock = lookup(stock["symbol"])
+        total = stock["total_shares"] * updated_stock["price"]
+        data = {}
+        data["symbol"] = updated_stock["symbol"]
+        data["name"] = updated_stock["name"]
+        data["shares"] = stock["total_shares"]
+        data["price"] = updated_stock["price"]
+        data["total"] = total
+        updated_portfolio.append(data)
+
+    # Sum all earnings
+    quote_accumulated = 0
+    for quote in updated_portfolio:
+        quote_accumulated += quote["total"]
+
+    portfolio_total = quote_accumulated + user_cash
+
+    return render_template("index.html", 
+        updated_portfolio=updated_portfolio, 
+        user_cash=user_cash, 
+        portfolio_total=portfolio_total
+    )
 
 
 @app.route("/buy", methods=["GET", "POST"])
@@ -72,12 +81,12 @@ def buy():
     """Buy shares of stock"""
     if request.method == "POST":
         symbol = request.form.get("symbol")
-        shares = int(request.form.get("shares"))
+        shares = request.form.get("shares")
         if not symbol:
             return apology("missing symbol", 400)
         if not shares:
             return apology("missing shares", 400)
-        if shares <= 0:
+        if int(shares) <= 0:
             return apology("invalid shares", 400)
         quote = lookup(symbol)
         if quote == None:
@@ -210,7 +219,43 @@ def register():
 @login_required
 def sell():
     """Sell shares of stock"""
-    return apology("TODO")
+    user_stocks = db.execute("SELECT symbol, SUM(shares) AS total_shares FROM history WHERE user_id = ? GROUP BY symbol", session["user_id"])
+
+    if request.method == "POST":
+        # Validate if user not selected stock, share or no-owned stock
+        stock_selected = request.form.get("symbol")
+        shares_selected = request.form.get("shares")
+        if not stock_selected:
+            return apology("missing symbol", 400)
+        if not shares_selected:
+            return apology("missing shares", 400)
+        # Check if stock selected exists in user's portfolio
+        if not any(stock["symbol"] == stock_selected for stock in user_stocks):
+            return apology("symbol not owned", 400)
+
+        # Validate if share number not positive or no-owned share number
+        if int(shares_selected) <= 0:
+            return apology("shares must be positive", 400)
+        owned_shares = 0
+        for stock in user_stocks:
+            if stock["symbol"] == stock_selected:
+                owned_shares = stock["total_shares"]
+        if int(shares_selected) > owned_shares:
+            return apology("too many shares", 400)
+
+        else:
+            # Add stock current price to user's cash
+            current_price = lookup(stock_selected)["price"]
+            user_cash = db.execute("SELECT users.cash FROM users WHERE id = ?", session["user_id"])[0]["cash"]
+
+            new_cash = user_cash + current_price
+
+            db.execute("UPDATE users SET cash = ? WHERE id = ?", new_cash, session["user_id"])
+            db.execute("INSERT INTO history (symbol, shares, price, user_id) VALUES(?, ?, ?, ?)", stock_selected, -int(shares_selected), current_price, session["user_id"])
+            
+            return redirect("/")
+    else:
+        return render_template("sell.html", user_stocks=user_stocks)
 
 
 def errorhandler(e):
