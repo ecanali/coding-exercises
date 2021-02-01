@@ -75,6 +75,21 @@ def index():
     )
 
 
+@app.route("/cash", methods=["POST"])
+@login_required
+def cash():
+    """Add more cash"""
+    cash_required = request.form.get("cash")
+    user_cash = db.execute("SELECT users.cash FROM users WHERE id = ?", session["user_id"])[0]["cash"]
+
+    if int(cash_required) <= 0:
+        return apology("cash must be positive", 400)
+    else: 
+        total_cash = int(cash_required) + user_cash
+        db.execute("UPDATE users SET cash = ? WHERE id = ?", total_cash, session["user_id"])
+        return redirect("/")
+
+
 @app.route("/buy", methods=["GET", "POST"])
 @login_required
 def buy():
@@ -109,7 +124,8 @@ def buy():
 @login_required
 def history():
     """Show history of transactions"""
-    return apology("TODO")
+    user_history = db.execute("SELECT * FROM history WHERE user_id = ?", session["user_id"])
+    return render_template("history.html", user_history=user_history)
 
 
 @app.route("/login", methods=["GET", "POST"])
