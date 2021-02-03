@@ -1,5 +1,6 @@
 import os
 import cs50
+import string
 
 from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session
@@ -17,12 +18,15 @@ app = Flask(__name__)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
 # Ensure responses aren't cached
+
+
 @app.after_request
 def after_request(response):
     response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
     response.headers["Expires"] = 0
     response.headers["Pragma"] = "no-cache"
     return response
+
 
 # Custom filter
 app.jinja_env.filters["usd"] = usd
@@ -45,7 +49,8 @@ if not os.environ.get("API_KEY"):
 @login_required
 def index():
     """Show portfolio of stocks"""
-    user_stocks = db.execute("SELECT symbol, SUM(shares) AS total_shares FROM history WHERE user_id = ? GROUP BY symbol", session["user_id"])
+    user_stocks = db.execute(
+        "SELECT symbol, SUM(shares) AS total_shares FROM history WHERE user_id = ? GROUP BY symbol", session["user_id"])
     user_cash = db.execute("SELECT users.cash FROM users WHERE id = ?", session["user_id"])[0]["cash"]
 
     # Update to current value each share unit of each symbol
@@ -68,11 +73,7 @@ def index():
 
     portfolio_total = quote_accumulated + user_cash
 
-    return render_template("index.html", 
-        updated_portfolio=updated_portfolio, 
-        user_cash=user_cash, 
-        portfolio_total=portfolio_total
-    )
+    return render_template("index.html", updated_portfolio=updated_portfolio, user_cash=user_cash, portfolio_total=portfolio_total)
 
 
 @app.route("/cash", methods=["POST"])
@@ -84,7 +85,7 @@ def cash():
 
     if int(cash_required) <= 0:
         return apology("cash must be positive", 400)
-    else: 
+    else:
         total_cash = int(cash_required) + user_cash
         db.execute("UPDATE users SET cash = ? WHERE id = ?", total_cash, session["user_id"])
         return redirect("/")
@@ -101,20 +102,31 @@ def buy():
             return apology("missing symbol", 400)
         if not shares:
             return apology("missing shares", 400)
+
+        for char in shares:
+            # checking whether the char is punctuation.
+            if char in string.punctuation:
+                return apology("invalid shares with punctuation", 400)
+
+        if any(c.isalpha() for c in shares):
+            return apology("invalid shares with text", 400)
+
         if int(shares) <= 0:
             return apology("invalid shares", 400)
+
         quote = lookup(symbol)
         if quote == None:
             return apology("invalid symbol", 400)
         else:
             current_price = quote["price"]
             user_cash = db.execute("SELECT users.cash FROM users WHERE id = ?", session["user_id"])[0]["cash"]
-            remainder_cash = user_cash - (shares * current_price)
+            remainder_cash = user_cash - (int(shares) * current_price)
             if remainder_cash < 0:
                 return apology("can't afford", 400)
             else:
                 db.execute("UPDATE users SET cash = ? WHERE id = ?", remainder_cash, session["user_id"])
-                db.execute("INSERT INTO history (symbol, shares, price, user_id) VALUES(?, ?, ?, ?)", quote["symbol"], shares, current_price, session["user_id"])
+                db.execute("INSERT INTO history (symbol, shares, price, user_id) VALUES(?, ?, ?, ?)",
+                           quote["symbol"], shares, current_price, session["user_id"])
                 return redirect("/")
     else:
         return render_template("buy.html")
@@ -202,22 +214,22 @@ def register():
 
         # Ensure username was submitted
         if not username:
-            return apology("must provide username", 403)
+            return apology("must provide username", 400)
 
         # Ensure password and confirmation were submitted
         elif not password or not confirmation:
-            return apology("must provide both password and confirmation", 403)
+            return apology("must provide both password and confirmation", 400)
 
         # Ensure passwords match
         elif not password == confirmation:
-            return apology("passwords do not match", 403)  
+            return apology("passwords do not match", 400)
 
         # Query database for username
         rows = db.execute("SELECT * FROM users WHERE username = ?", username)
 
         # Ensure username not exists
         if len(rows) >= 1:
-            return apology("invalid username, it already exists", 403)
+            return apology("invalid username, it already exists", 400)
 
         # Generate password hash and save new user to database
         else:
@@ -235,7 +247,8 @@ def register():
 @login_required
 def sell():
     """Sell shares of stock"""
-    user_stocks = db.execute("SELECT symbol, SUM(shares) AS total_shares FROM history WHERE user_id = ? GROUP BY symbol", session["user_id"])
+    user_stocks = db.execute(
+        "SELECT symbol, SUM(shares) AS total_shares FROM history WHERE user_id = ? GROUP BY symbol", session["user_id"])
 
     if request.method == "POST":
         # Validate if user not selected stock, share or no-owned stock
@@ -248,6 +261,14 @@ def sell():
         # Check if stock selected exists in user's portfolio
         if not any(stock["symbol"] == stock_selected for stock in user_stocks):
             return apology("symbol not owned", 400)
+
+        for char in shares_selected:
+            # checking whether the char is punctuation.
+            if char in string.punctuation:
+                return apology("invalid shares with punctuation", 400)
+
+        if any(c.isalpha() for c in shares_selected):
+            return apology("invalid shares with text", 400)
 
         # Validate if share number not positive or no-owned share number
         if int(shares_selected) <= 0:
@@ -264,11 +285,12 @@ def sell():
             current_price = lookup(stock_selected)["price"]
             user_cash = db.execute("SELECT users.cash FROM users WHERE id = ?", session["user_id"])[0]["cash"]
 
-            new_cash = user_cash + current_price
+            new_cash = user_cash + (int(shares_selected) * current_price)
 
             db.execute("UPDATE users SET cash = ? WHERE id = ?", new_cash, session["user_id"])
-            db.execute("INSERT INTO history (symbol, shares, price, user_id) VALUES(?, ?, ?, ?)", stock_selected, -int(shares_selected), current_price, session["user_id"])
-            
+            db.execute("INSERT INTO history (symbol, shares, price, user_id) VALUES(?, ?, ?, ?)",
+                       stock_selected, -int(shares_selected), current_price, session["user_id"])
+
             return redirect("/")
     else:
         return render_template("sell.html", user_stocks=user_stocks)

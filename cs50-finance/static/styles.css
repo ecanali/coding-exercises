@@ -68,3 +68,13 @@ table td, table th
     vertical-align: top;
     border-top: 1px solid #dee2e6;
 }
+
+.add-cash form
+{
+    display: flex;
+    justify-content: center;
+}
+.add-cash form input
+{
+    margin-right: 8px;
+}
