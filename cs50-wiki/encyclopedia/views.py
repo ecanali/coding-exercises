@@ -6,6 +6,7 @@ from markdown2 import Markdown
 
 from . import util
 
+
 class NewPageForm(forms.Form):
     title = forms.CharField(label="Title")
     content = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Input content using the Markdown markup language'}))
@@ -150,3 +151,4 @@ def get_random(request):
         "entry": html_format,
         "title": random_choice.capitalize()
     })
+    

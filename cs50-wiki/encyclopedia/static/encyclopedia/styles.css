@@ -12,9 +12,27 @@ h1 {
     padding-top: 20px;
 }
 
+input[type="text"] {
+    width: 100%;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+}
+
+input[type="submit"] {
+    padding: 5px 10px;
+    position: absolute;
+    right: 0;
+    margin-top: 4px;
+}
+
+table {
+    position: relative;
+}
+
 textarea {
-    height: 90vh;
-    width: 80%;
+    height: 50vh;
+    width: 30vw;
+    padding: 10px 15px;
 }
 
 .main {
