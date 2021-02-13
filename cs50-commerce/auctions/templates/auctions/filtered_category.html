@@ -1,7 +1,18 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <h2>Active Listings</h2>
+    <h2>Categories</h2>
+
+    <form action="{% url 'filtered_category' %}" method="get">
+        <select name="filter">
+            <option value="all">All</option>
+            {% for category in categories %}
+                <option value="{{ category.id }}">{{ category.name }}</option>
+            {% endfor %}
+        </select>
+        <input type="submit" value="Filter">
+    </form>
+
 
     <div class="active-listing">
         {% for listing in active_listing %}
