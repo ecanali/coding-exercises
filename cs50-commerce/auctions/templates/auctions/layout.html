@@ -19,11 +19,15 @@
         <ul class="nav">
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'index' %}">Active Listings</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="{% url 'categories' %}">Categories</a>
             </li>
             {% if user.is_authenticated %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'create' %}">Create Listing</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
                 </li>
             {% else %}
@@ -36,6 +40,15 @@
             {% endif %}
         </ul>
         <hr>
+        {% for message in messages %}
+            <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                {{ message | safe }}
+            </div>
+        {% endfor %}
+
         {% block body %}
         {% endblock %}
     </body>

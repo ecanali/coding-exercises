@@ -1,6 +1,7 @@
 from django import forms
 
 from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
@@ -24,24 +25,53 @@ def index(request):
     })
 
 
+def listing(request, id):
+    listing = Listing.objects.get(id=id)
+    if request.method == "POST":
+        bid_offered = int(request.POST["bid"])
+        print(bid_offered)
+        if bid_offered > listing.current_price:
+            return HttpResponse("It worked! Work in the logic now!")
+        else:
+            # message = messages.add_message(request, messages.INFO, 'Hello world.')
+            messages2 = messages.error(request, "Error: This is the sample error Flash message.")   
+            print(messages2)
+
+            # return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
+            return render(request, "auctions/listing.html", {
+            "listing": listing,
+            "messages": messages2
+        })
+
+
+    else:
+        return render(request, "auctions/listing.html", {
+            "listing": listing
+        })
+
+# If the user is signed in, the user should be able to bid on the item. The bid must be at least as large as the starting bid, and must be greater than any other bids that have been placed (if any). If the bid doesn’t meet those criteria, the user should be presented with an error.
+
+
+
 def categories(request):
-    all_categories = Category.objects.all()
-
-    # filter_query = request.GET['filter']
-    # print(filter_query)
-
-    return render(request, "auctions/categories.html", {
-        "active_listing": Listing.objects.all(),
-        "categories": all_categories
-    })
-
-
-# def filtered_category(request, filter):
-#     return render(request, "auctions/filtered_category.html", {
-#         "active_listing": Listing.objects.all(),
-#         "categories": all_categories
-#     })
-
+    if request.method == "POST":
+        filter = request.POST["filter"]
+        if filter == "all":
+            return render(request, "auctions/categories.html", {
+                "active_listing": Listing.objects.all(),
+                "categories": Category.objects.all()
+            })
+        else:
+            return render(request, "auctions/categories.html", {
+                "filter": int(filter),
+                "active_listing": Listing.objects.filter(category_id=int(filter)),
+                "categories": Category.objects.all()
+            })
+    else:
+        return render(request, "auctions/categories.html", {
+            "active_listing": Listing.objects.all(),
+            "categories": Category.objects.all()
+        })
 
 
 def login_view(request):

@@ -3,17 +3,24 @@
 {% block body %}
     <h2>Categories</h2>
 
-    <form action="{% url 'categories' %}" method="get">
+    <h4>List of all listing categories:</h4>
+    <form action="{% url 'categories' %}" method="post">
+        {% csrf_token %}
         <select name="filter">
             <option value="all">All</option>
             {% for category in categories %}
-                <option value="{{ category.id }}">{{ category.name }}</option>
+                <a href="">{{category.name}}</a>
+                {% if category.id == filter %}
+                    <option value="{{ category.id }}" selected>{{ category.name }}</option>
+                {% else %}
+                    <option value="{{ category.id }}">{{ category.name }}</option>
+                {% endif %}
             {% endfor %}
         </select>
         <input type="submit" value="Filter">
     </form>
 
-
+    <h4>All active listings in this category:</h4>
     <div class="active-listing">
         {% for listing in active_listing %}
             <div class="listing-item">
@@ -28,5 +35,4 @@
             </div>
         {% endfor %}
     </div>
-
 {% endblock %}

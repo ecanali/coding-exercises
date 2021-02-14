@@ -1,0 +1,21 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Listing: {{ listing.title }}</h2>
+    <div class="listing-page">
+        <div class="listing-page-img">
+            <img src="{{ listing.image_url }}" alt="{{ listing.title }}" style="height: 300px;">
+        </div>
+        <div class="listing-page-info">
+            <p>{{ listing.description }}</p>
+            <p>Current Price: ${{ listing.current_price }}</p>
+        </div>
+        <div class="bid">
+            <form action="{% url 'listing' listing.id %}" method="post">
+                {% csrf_token %}
+                <input type="number" name="bid" min="1">
+                <input type="submit" value="Place Bid">
+            </form>
+        </div>
+    </div>
+{% endblock %}
