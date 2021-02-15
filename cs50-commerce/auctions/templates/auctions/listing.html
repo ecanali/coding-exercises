@@ -3,6 +3,13 @@
 {% block body %}
     <h2>Listing: {{ listing.title }}</h2>
     <div class="listing-page">
+        <a href="{% url 'watch' listing.id %}">
+            {% if watchlisted == True %}
+                <button>Remove from Watchlist</button>
+            {% else %}
+                <button>Add to Watchlist</button>
+            {% endif %}
+        </a>
         <div class="listing-page-img">
             <img src="{{ listing.image_url }}" alt="{{ listing.title }}" style="height: 300px;">
         </div>
