@@ -20,8 +20,9 @@ class CreateListingForm(forms.Form):
 
 
 def index(request):
+    # ALTER TO FILTER ONLY THE REAL STATUS "ACTIVE" LISTINGS
     return render(request, "auctions/index.html", {
-        "active_listing": Listing.objects.filter(status="active").order_by('-id')
+        "active_listing": Listing.objects.all()
     })
 
 
@@ -32,54 +33,13 @@ def listing(request, id):
         messages.error(request, 'Sorry, listing does not exist.')
         return HttpResponseRedirect(reverse("index"))
 
-    watchlisted = False
-    owner = False
-    winner = False
-
-    comments = Comment.objects.filter(listing_id=listing).order_by('-id')
-
-    if request.user.is_authenticated:
-        user = User.objects.get(id=request.user.id)
-
-        if user.username == str(listing.owner_user_id):
-            owner = True
-
-        if user.id == listing.winner_id:
-            winner = True
-        
-        user_watchlist = Watchlist.objects.get(user_id=user.id)
-
-        converted_watchlist = user_watchlist.listings_watched.strip('"[]"').split(', ')
-
-        for item in converted_watchlist:
-            if str(id) == item:
-                watchlisted = True
-        
-    return render(request, "auctions/listing.html", {
-        "listing": listing,
-        "watchlisted": watchlisted,
-        "owner": owner,
-        "winner": winner,
-        "comments": comments
-    })
-
-
-def bid(request, id):
-    try:
-        listing = Listing.objects.get(id=id)
-    except:
-        messages.error(request, 'Sorry, listing does not exist.')
-        return HttpResponseRedirect(reverse("index"))
-
     if request.method == "POST":
         if not request.user.is_authenticated:
             messages.error(request, 'Sorry, you must log in before place a bid.')
             return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
-
         bid_offered = int(request.POST["bid"])
-
         if bid_offered > listing.current_price:
-            new_bid = Bid(price=bid_offered, listing_id=listing, user_id=User.objects.get(id=request.user.id))
+            new_bid = Bid(price=bid_offered, listing_id=Listing.objects.get(id=id), user_id=User.objects.get(id=request.user.id))
             new_bid.save()
             listing.current_price = bid_offered
             listing.save()
@@ -88,6 +48,37 @@ def bid(request, id):
         else:
             messages.error(request, 'Sorry, bid must be greater than the current price.')
             return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
+    else:
+        watchlisted = False
+        owner = False
+        winner = False
+
+        comments = Comment.objects.filter(listing_id=listing).order_by('-id')
+
+        if request.user.is_authenticated:
+            user = User.objects.get(id=request.user.id)
+
+            if user.username == str(listing.owner_user_id):
+                owner = True
+
+            if user.id == listing.winner_id:
+                winner = True
+            
+            user_watchlist = Watchlist.objects.get(user_id=user.id)
+
+            converted_watchlist = user_watchlist.listings_watched.strip('"[]"').split(', ')
+
+            for item in converted_watchlist:
+                if str(id) == item:
+                    watchlisted = True
+            
+        return render(request, "auctions/listing.html", {
+            "listing": listing,
+            "watchlisted": watchlisted,
+            "owner": owner,
+            "winner": winner,
+            "comments": comments
+        })
 
 
 def watch(request, id):
@@ -97,32 +88,33 @@ def watch(request, id):
         messages.error(request, 'Sorry, listing does not exist.')
         return HttpResponseRedirect(reverse("index"))
 
-    if not request.user.is_authenticated:
-        messages.error(request, 'Sorry, you must first log in to access your watchlist.')
+    if request.method == "GET":
+        if not request.user.is_authenticated:
+            messages.error(request, 'Sorry, you must first log in to access your watchlist.')
+            return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
+
+        user = User.objects.get(id=request.user.id)
+        user_watchlist = Watchlist.objects.get(user_id=user.id)
+
+        converted_watchlist = user_watchlist.listings_watched.strip('"[]"').split(', ')
+
+        string_watchlist = ""
+        separator = ", "
+        for item in converted_watchlist:
+            if str(id) == item:
+                converted_watchlist.remove(item)
+                string_watchlist = separator.join(converted_watchlist)
+                user_watchlist.listings_watched = string_watchlist
+                user_watchlist.save()
+                return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
+            if not str(id) in converted_watchlist:
+                converted_watchlist.append(str(id))
+                string_watchlist = separator.join(converted_watchlist)
+                user_watchlist.listings_watched = string_watchlist
+                user_watchlist.save()
+                return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
+
         return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
-
-    user = User.objects.get(id=request.user.id)
-    user_watchlist = Watchlist.objects.get(user_id=user.id)
-
-    converted_watchlist = user_watchlist.listings_watched.strip('"[]"').split(', ')
-
-    string_watchlist = ""
-    separator = ", "
-    for item in converted_watchlist:
-        if str(id) == item:
-            converted_watchlist.remove(item)
-            string_watchlist = separator.join(converted_watchlist)
-            user_watchlist.listings_watched = string_watchlist
-            user_watchlist.save()
-            return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
-        if not str(id) in converted_watchlist:
-            converted_watchlist.append(str(id))
-            string_watchlist = separator.join(converted_watchlist)
-            user_watchlist.listings_watched = string_watchlist
-            user_watchlist.save()
-            return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
-
-    return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
 
 
 def close(request, id):
@@ -174,45 +166,23 @@ def comment(request, id):
         return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
 
 
-def watchlist(request):
-    if not request.user.is_authenticated:
-        messages.error(request, 'Sorry, you must first log in to access your watchlist.')
-        return HttpResponseRedirect(reverse("index"))
-
-    user = User.objects.get(id=request.user.id)
-    user_watchlist = Watchlist.objects.get(user_id=user.id)
-
-    converted_watchlist = user_watchlist.listings_watched.strip('"[]"').split(', ')
-
-    list_listing_ids = []
-    for item in converted_watchlist:
-        item = int(item)
-        list_listing_ids.append(item)
-
-    listings_watched = Listing.objects.filter(pk__in=list_listing_ids).order_by('-id')
-    
-    return render(request, "auctions/watchlist.html", {
-        "active_listing": listings_watched
-    })
-
-
 def categories(request):
     if request.method == "POST":
         filter = request.POST["filter"]
         if filter == "all":
             return render(request, "auctions/categories.html", {
-                "active_listing": Listing.objects.filter(status="active").order_by('-id'),
+                "active_listing": Listing.objects.all(),
                 "categories": Category.objects.all()
             })
         else:
             return render(request, "auctions/categories.html", {
                 "filter": int(filter),
-                "active_listing": Listing.objects.filter(category_id=int(filter), status="active"),
+                "active_listing": Listing.objects.filter(category_id=int(filter)),
                 "categories": Category.objects.all()
             })
     else:
         return render(request, "auctions/categories.html", {
-            "active_listing": Listing.objects.filter(status="active").order_by('-id'),
+            "active_listing": Listing.objects.all(),
             "categories": Category.objects.all()
         })
 

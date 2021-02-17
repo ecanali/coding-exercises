@@ -47,10 +47,10 @@ class Listing(models.Model):
     starting_price = models.PositiveIntegerField()
     current_price = models.PositiveIntegerField()
     image_url = models.CharField(max_length=256)
-    # category_id = models.ManyToManyField(Category)
     category_id = models.PositiveIntegerField()
     status = models.CharField(max_length=64)
     owner_user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    winner_id = models.PositiveIntegerField()
 
 
 # 1 for bids
@@ -67,3 +67,6 @@ class Comment(models.Model):
     text = models.TextField()
     listing_id = models.ForeignKey(Listing, on_delete=models.CASCADE)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.text}"
