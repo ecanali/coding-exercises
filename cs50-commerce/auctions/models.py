@@ -11,6 +11,21 @@ class User(AbstractUser):
     pass
 # Insert Watchlist field within the User model?
 
+
+# 1 for auction listings
+# must have: ID (auto created), title, description, starting prince, current price, user who bid the current price, photo, category, active or closed
+class Listing(models.Model):
+    title = models.CharField(max_length=64)
+    description = models.CharField(max_length=128)
+    starting_price = models.PositiveIntegerField()
+    current_price = models.PositiveIntegerField()
+    image_url = models.CharField(max_length=256)
+    category_id = models.PositiveIntegerField()
+    status = models.CharField(max_length=64)
+    owner_user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    winner_id = models.PositiveIntegerField()
+
+
 class Watchlist(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     listings_watched = models.CharField(max_length=100)
@@ -26,31 +41,6 @@ class Watchlist(models.Model):
     
     def __str__(self):
         return f"{self.listings_watched}"
-
-
-# I need to have at least 3 Models in addition to the User model.
-
-# 1 (extra) for auction categories
-# must have: ID, name of the category (e.g. consoles, games, joysticks, accessories).
-class Category(models.Model):
-    name = models.CharField(max_length=64)
-
-    def __str__(self):
-        return f"{self.name}"
-
-
-# 1 for auction listings
-# must have: ID (auto created), title, description, starting prince, current price, user who bid the current price, photo, category, active or closed
-class Listing(models.Model):
-    title = models.CharField(max_length=64)
-    description = models.CharField(max_length=128)
-    starting_price = models.PositiveIntegerField()
-    current_price = models.PositiveIntegerField()
-    image_url = models.CharField(max_length=256)
-    category_id = models.PositiveIntegerField()
-    status = models.CharField(max_length=64)
-    owner_user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    winner_id = models.PositiveIntegerField()
 
 
 # 1 for bids
@@ -70,3 +60,14 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"{self.text}"
+
+
+# I need to have at least 3 Models in addition to the User model.
+
+# 1 (extra) for auction categories
+# must have: ID, name of the category (e.g. consoles, games, joysticks, accessories).
+class Category(models.Model):
+    name = models.CharField(max_length=64)
+
+    def __str__(self):
+        return f"{self.name}"

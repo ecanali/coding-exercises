@@ -8,7 +8,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User, Category, Listing, Bid, Watchlist, Comment
+from .models import User, Listing, Watchlist, Bid, Comment, Category
 
 
 class CreateListingForm(forms.Form):
@@ -17,6 +17,42 @@ class CreateListingForm(forms.Form):
     starting_price = forms.IntegerField(min_value=1)
     image_url = forms.URLField(label='Image URL', required=False)
     category = forms.ModelChoiceField(queryset=Category.objects.all(), empty_label="Choose one")
+
+
+def create(request):
+    form = CreateListingForm(request.POST)
+    
+    if request.method == "POST":
+        if not request.user.is_authenticated:
+            messages.error(request, 'Sorry, you must log in before create a listing.')
+            return HttpResponseRedirect(reverse("create"))
+        if form.is_valid():
+            # Isolate the data from the 'cleaned' version of form data
+            title = form.cleaned_data["title"]
+            description = form.cleaned_data["description"]
+            starting_price = form.cleaned_data["starting_price"]
+            image_url = form.cleaned_data["image_url"]
+            category = int(request.POST['category'])
+
+            listing = Listing(
+                title=title, 
+                description=description, 
+                starting_price=starting_price, 
+                current_price=starting_price, 
+                image_url=image_url, 
+                category_id=category, 
+                status="active", 
+                owner_user_id=User.objects.get(id=request.user.id), 
+                winner_id=0
+            )
+            listing.save()
+
+        # REDIRECT TO THE NEW LISTING WHEN I CREATE THAT PAGE
+        return HttpResponseRedirect(reverse("index"))
+    else:
+        return render(request, "auctions/create.html", {
+        "form": form
+    })
 
 
 def index(request):
@@ -64,32 +100,6 @@ def listing(request, id):
     })
 
 
-def bid(request, id):
-    try:
-        listing = Listing.objects.get(id=id)
-    except:
-        messages.error(request, 'Sorry, listing does not exist.')
-        return HttpResponseRedirect(reverse("index"))
-
-    if request.method == "POST":
-        if not request.user.is_authenticated:
-            messages.error(request, 'Sorry, you must log in before place a bid.')
-            return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
-
-        bid_offered = int(request.POST["bid"])
-
-        if bid_offered > listing.current_price:
-            new_bid = Bid(price=bid_offered, listing_id=listing, user_id=User.objects.get(id=request.user.id))
-            new_bid.save()
-            listing.current_price = bid_offered
-            listing.save()
-            messages.success(request, 'Congratulations, now you have the highest bid.')
-            return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
-        else:
-            messages.error(request, 'Sorry, bid must be greater than the current price.')
-            return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
-
-
 def watch(request, id):
     try:
         listing = Listing.objects.get(id=id)
@@ -116,6 +126,14 @@ def watch(request, id):
             user_watchlist.save()
             return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
         if not str(id) in converted_watchlist:
+            # When user has no watchlist because removed all items by itself:
+            if len(converted_watchlist) == 1 and item == "":
+                converted_watchlist.append(str(id))
+                separator2 = ""
+                string_watchlist = separator2.join(converted_watchlist)
+                user_watchlist.listings_watched = string_watchlist
+                user_watchlist.save()
+                return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
             converted_watchlist.append(str(id))
             string_watchlist = separator.join(converted_watchlist)
             user_watchlist.listings_watched = string_watchlist
@@ -123,6 +141,32 @@ def watch(request, id):
             return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
 
     return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
+
+
+def bid(request, id):
+    try:
+        listing = Listing.objects.get(id=id)
+    except:
+        messages.error(request, 'Sorry, listing does not exist.')
+        return HttpResponseRedirect(reverse("index"))
+
+    if request.method == "POST":
+        if not request.user.is_authenticated:
+            messages.error(request, 'Sorry, you must log in before place a bid.')
+            return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
+
+        bid_offered = int(request.POST["bid"])
+
+        if bid_offered > listing.current_price:
+            new_bid = Bid(price=bid_offered, listing_id=listing, user_id=User.objects.get(id=request.user.id))
+            new_bid.save()
+            listing.current_price = bid_offered
+            listing.save()
+            messages.success(request, 'Congratulations, now you have the highest bid.')
+            return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
+        else:
+            messages.error(request, 'Sorry, bid must be greater than the current price.')
+            return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
 
 
 def close(request, id):
@@ -180,9 +224,13 @@ def watchlist(request):
         return HttpResponseRedirect(reverse("index"))
 
     user = User.objects.get(id=request.user.id)
-    user_watchlist = Watchlist.objects.get(user_id=user.id)
+    user_watchlist = Watchlist.objects.filter(user_id=user.id)
 
-    converted_watchlist = user_watchlist.listings_watched.strip('"[]"').split(', ')
+    if user_watchlist[0].listings_watched == "":
+        messages.error(request, 'Sorry, you do not have any listing in your watchlist yet.')
+        return HttpResponseRedirect(reverse("index"))
+
+    converted_watchlist = user_watchlist[0].listings_watched.strip('"[]"').split(', ')
 
     list_listing_ids = []
     for item in converted_watchlist:
@@ -267,40 +315,3 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "auctions/register.html")
-
-
-def create(request):
-    form = CreateListingForm(request.POST)
-    
-    if request.method == "POST":
-        if not request.user.is_authenticated:
-            messages.error(request, 'Sorry, you must log in before create a listing.')
-            return HttpResponseRedirect(reverse("create"))
-        if form.is_valid():
-            # Isolate the data from the 'cleaned' version of form data
-            title = form.cleaned_data["title"]
-            description = form.cleaned_data["description"]
-            starting_price = form.cleaned_data["starting_price"]
-            image_url = form.cleaned_data["image_url"]
-            category = int(request.POST['category'])
-
-            listing = Listing(
-                title=title, 
-                description=description, 
-                starting_price=starting_price, 
-                current_price=starting_price, 
-                image_url=image_url, 
-                category_id=category, 
-                status="active", 
-                owner_user_id=User.objects.get(id=request.user.id), 
-                winner_id=0
-            )
-            listing.save()
-
-        # REDIRECT TO THE NEW LISTING WHEN I CREATE THAT PAGE
-        return HttpResponseRedirect(reverse("index"))
-    else:
-        return render(request, "auctions/create.html", {
-        "form": form
-    })
-
