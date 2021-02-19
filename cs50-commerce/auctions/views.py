@@ -19,8 +19,13 @@ class CreateListingForm(forms.Form):
     category = forms.ModelChoiceField(queryset=Category.objects.all(), empty_label="Choose one")
 
 
+class CreateBidForm(forms.Form):
+    bid = forms.IntegerField(min_value=1)
+
+
 def create(request):
     form = CreateListingForm(request.POST)
+    user = User.objects.get(id=request.user.id)
     
     if request.method == "POST":
         if not request.user.is_authenticated:
@@ -32,7 +37,7 @@ def create(request):
             description = form.cleaned_data["description"]
             starting_price = form.cleaned_data["starting_price"]
             image_url = form.cleaned_data["image_url"]
-            category = int(request.POST['category'])
+            category = form.cleaned_data['category']
 
             listing = Listing(
                 title=title, 
@@ -40,10 +45,10 @@ def create(request):
                 starting_price=starting_price, 
                 current_price=starting_price, 
                 image_url=image_url, 
-                category_id=category, 
+                category_id=Category.objects.get(name=category.name), 
                 status="active", 
-                owner_user_id=User.objects.get(id=request.user.id), 
-                winner_id=0
+                owner_user_id=User.objects.get(id=user.id), 
+                winner_id=User.objects.get(id=user.id)
             )
             listing.save()
 
@@ -79,8 +84,8 @@ def listing(request, id):
 
         if user.username == str(listing.owner_user_id):
             owner = True
-
-        if user.id == listing.winner_id:
+            
+        if user == listing.winner_id and user != listing.owner_user_id:
             winner = True
         
         user_watchlist = Watchlist.objects.get(user_id=user.id)
@@ -91,12 +96,15 @@ def listing(request, id):
             if str(id) == item:
                 watchlisted = True
         
+        bid_form = CreateBidForm(request.POST)
+
     return render(request, "auctions/listing.html", {
         "listing": listing,
         "watchlisted": watchlisted,
         "owner": owner,
         "winner": winner,
-        "comments": comments
+        "comments": comments,
+        "bid_form": bid_form
     })
 
 
@@ -155,17 +163,28 @@ def bid(request, id):
             messages.error(request, 'Sorry, you must log in before place a bid.')
             return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
 
-        bid_offered = int(request.POST["bid"])
+        bid_form = CreateBidForm(request.POST)
 
-        if bid_offered > listing.current_price:
-            new_bid = Bid(price=bid_offered, listing_id=listing, user_id=User.objects.get(id=request.user.id))
-            new_bid.save()
-            listing.current_price = bid_offered
-            listing.save()
-            messages.success(request, 'Congratulations, now you have the highest bid.')
-            return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
+        if bid_form.is_valid():
+            # Isolate the data from the 'cleaned' version of form data
+            bid_offered = bid_form.cleaned_data["bid"]
+            # print(type(bid_offered))
+            # print(bid_offered)
+
+            # bid_offered = int(request.POST["bid"])
+
+            if bid_offered > listing.current_price:
+                new_bid = Bid(price=bid_offered, listing_id=listing, user_id=User.objects.get(id=request.user.id))
+                new_bid.save()
+                listing.current_price = bid_offered
+                listing.save()
+                messages.success(request, 'Congratulations, now you have the highest bid.')
+                return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
+            else:
+                messages.error(request, 'Sorry, bid must be greater than the current price.')
+                return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
         else:
-            messages.error(request, 'Sorry, bid must be greater than the current price.')
+            messages.error(request, 'Sorry, invalid bid.')
             return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
 
 

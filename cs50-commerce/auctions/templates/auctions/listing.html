@@ -34,7 +34,8 @@
         <div class="bid">
             <form action="{% url 'bid' listing.id %}" method="post">
                 {% csrf_token %}
-                <input type="number" name="bid" min="1">
+                <!-- <input type="number" name="bid" min="1"> -->
+                {{ bid_form }}
                 <input type="submit" value="Place Bid">
             </form>
         </div>

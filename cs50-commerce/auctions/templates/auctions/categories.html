@@ -23,16 +23,18 @@
     <h4>All active listings in this category:</h4>
     <div class="active-listing">
         {% for listing in active_listing %}
-            <div class="listing-item">
-                <div class="listing-img">
-                    <img src="{{ listing.image_url }}" alt="{{ listing.title }}" style="height: 100px;">
+            <a href="{% url 'listing' listing.id %}">
+                <div class="listing-item">
+                    <div class="listing-img">
+                        <img src="{{ listing.image_url }}" alt="{{ listing.title }}" style="height: 100px;">
+                    </div>
+                    <div class="listing-info">
+                        <h3>{{ listing.title }}</h3>
+                        <p>{{ listing.description }}</p>
+                        <p>Price: ${{ listing.current_price }}</p>
+                    </div>
                 </div>
-                <div class="listing-info">
-                    <h3>{{ listing.title }}</h3>
-                    <p>{{ listing.description }}</p>
-                    <p>Price: ${{ listing.current_price }}</p>
-                </div>
-            </div>
+            </a>
         {% endfor %}
     </div>
 {% endblock %}
