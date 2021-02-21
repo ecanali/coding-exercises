@@ -6,7 +6,7 @@
     <h4>List of all listing categories:</h4>
     <form action="{% url 'categories' %}" method="post">
         {% csrf_token %}
-        <select name="filter">
+        <select name="filter" class="form-control reduced-inputs">
             <option value="all">All</option>
             {% for category in categories %}
                 <a href="">{{category.name}}</a>
@@ -17,7 +17,7 @@
                 {% endif %}
             {% endfor %}
         </select>
-        <input type="submit" value="Filter">
+        <input type="submit" value="Filter" class="btn btn-primary">
     </form>
 
     <h4>All active listings in this category:</h4>
@@ -26,7 +26,7 @@
             <a href="{% url 'listing' listing.id %}">
                 <div class="listing-item">
                     <div class="listing-img">
-                        <img src="{{ listing.image_url }}" alt="{{ listing.title }}" style="height: 100px;">
+                        <img src="{{ listing.image_url }}" alt="{{ listing.title }}">
                     </div>
                     <div class="listing-info">
                         <h3>{{ listing.title }}</h3>

@@ -2,57 +2,67 @@
 
 {% block body %}
     <h2>Listing: {{ listing.title }}</h2>
+
     <div class="listing-page">
         <div class="actions">
             <a href="{% url 'watch' listing.id %}">
                 {% if watchlisted == True %}
-                    <button>Remove from Watchlist</button>
+                    <button class="btn btn-secondary">Remove from Watchlist</button>
                 {% else %}
-                    <button>Add to Watchlist</button>
+                    <button class="btn btn-secondary">Add to Watchlist</button>
                 {% endif %}
             </a>
 
-            <!-- FAZER SE NAO ESTIVER "ACTIVE" NÃO APARECER ESSE BOTAO TB-->
-            {% if owner == True %}
+            {% if owner == True and listing.status == 'active' %}
                 <a href="{% url 'close' listing.id %}">
-                    <button>Close</button>
+                    <button class="btn btn-primary">Close</button>
                 </a>
+            {% endif %}
+
+            {% if listing.status == 'closed' %}
+                <h4>This listing is closed, the winner is the user: {{ listing.winner_id }}</h4>
             {% endif %}
 
             {% if winner == True %}
                 <h4>Congratulations! You won this bid!</h4>
             {% endif %}
+        </div>
 
-        </div>
         <div class="listing-page-img">
-            <img src="{{ listing.image_url }}" alt="{{ listing.title }}" style="height: 300px;">
+            <img src="{{ listing.image_url }}" alt="{{ listing.title }}">
         </div>
+
         <div class="listing-page-info">
-            <p>{{ listing.description }}</p>
-            <p>Current Price: ${{ listing.current_price }}</p>
+            <p><strong>Description:</strong> {{ listing.description }}</p>
+            <p><strong>Current Price:</strong> ${{ listing.current_price }}</p>
         </div>
-        <div class="bid">
-            <form action="{% url 'bid' listing.id %}" method="post">
-                {% csrf_token %}
-                <!-- <input type="number" name="bid" min="1"> -->
-                {{ bid_form }}
-                <input type="submit" value="Place Bid">
-            </form>
-        </div>
-        <div class="comments-session">
-            <h4>Comments:</h4>
-            <form action="{% url 'comment' listing.id %}" method="post">
-                {% csrf_token %}
-                <textarea name="comment" cols="30" rows="2" placeholder="Write your comment here"></textarea>
-                <input type="submit" value="Post Comment">
-            </form>
-            <div class="comments">
-                {% for comment in comments %}
-                    <p><strong>{{ comment.user_id }}</strong> says: {{ comment.text }}</p>
-                {% empty %}
-                    <p>No comments yet.</p>
-                {% endfor %}
+
+        <hr>
+        {% if listing.status == 'active' %}
+            <div class="bid">
+                <form action="{% url 'bid' listing.id %}" method="post">
+                    {% csrf_token %}
+                    {{ bid_form }}
+                    <input type="submit" value="Place Bid" class="btn btn-primary">
+                </form>
             </div>
-        </div>
+
+            <hr>
+            <div class="comments-session">
+                <h4>Comments:</h4>
+                <form action="{% url 'comment' listing.id %}" method="post">
+                    {% csrf_token %}
+                    {{ comment_form }}
+                    <input type="submit" value="Post Comment" class="btn btn-primary">
+                </form>
+                <div class="comments">
+                    {% for comment in comments %}
+                        <p><strong>{{ comment.user_id }}</strong> says: {{ comment.text }}</p>
+                    {% empty %}
+                        <p>No comments yet.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %} 
     </div>
 {% endblock %}

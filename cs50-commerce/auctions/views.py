@@ -1,30 +1,38 @@
 from django import forms
+from django.core.exceptions import ObjectDoesNotExist
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
 from .models import User, Listing, Watchlist, Bid, Comment, Category
 
 
+# Form fields:
 class CreateListingForm(forms.Form):
-    title = forms.CharField(label="Title")
-    description = forms.CharField(label="Description")
-    starting_price = forms.IntegerField(min_value=1)
-    image_url = forms.URLField(label='Image URL', required=False)
-    category = forms.ModelChoiceField(queryset=Category.objects.all(), empty_label="Choose one")
+    title = forms.CharField(label="Title", widget=forms.TextInput(attrs={'class':'form-control'}))
+    description = forms.CharField(label="Description", widget=forms.TextInput(attrs={'class':'form-control'}))
+    starting_price = forms.IntegerField(min_value=1, widget=forms.NumberInput(attrs={'placeholder':'0', 'class':'form-control'}))
+    image_url = forms.URLField(widget=forms.TextInput(attrs={'placeholder':'http://', 'class':'form-control'}), label='Image URL', required=False)
+    category = forms.ModelChoiceField(queryset=Category.objects.all(), empty_label="Choose one", widget=forms.Select(attrs={'class':'form-control'}))
 
 
 class CreateBidForm(forms.Form):
-    bid = forms.IntegerField(min_value=1)
+    bid = forms.IntegerField(min_value=1, widget=forms.NumberInput(attrs={'placeholder':'0', 'class':'form-control reduced-inputs'}))
 
 
+class CreateCommentForm(forms.Form):
+    comment = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Write your comment here', "rows":2, "cols":30, 'class':'form-control'}), required=False)
+
+
+# Routes:
+@login_required(redirect_field_name=None, login_url='/login')
 def create(request):
-    form = CreateListingForm(request.POST)
+    form = CreateListingForm(request.POST or None)
     user = User.objects.get(id=request.user.id)
     
     if request.method == "POST":
@@ -52,8 +60,7 @@ def create(request):
             )
             listing.save()
 
-        # REDIRECT TO THE NEW LISTING WHEN I CREATE THAT PAGE
-        return HttpResponseRedirect(reverse("index"))
+            return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
     else:
         return render(request, "auctions/create.html", {
         "form": form
@@ -79,6 +86,9 @@ def listing(request, id):
 
     comments = Comment.objects.filter(listing_id=listing).order_by('-id')
 
+    bid_form = CreateBidForm(request.POST or None)
+    comment_form = CreateCommentForm(request.POST or None)
+
     if request.user.is_authenticated:
         user = User.objects.get(id=request.user.id)
 
@@ -95,8 +105,6 @@ def listing(request, id):
         for item in converted_watchlist:
             if str(id) == item:
                 watchlisted = True
-        
-        bid_form = CreateBidForm(request.POST)
 
     return render(request, "auctions/listing.html", {
         "listing": listing,
@@ -104,20 +112,18 @@ def listing(request, id):
         "owner": owner,
         "winner": winner,
         "comments": comments,
-        "bid_form": bid_form
+        "bid_form": bid_form,
+        "comment_form": comment_form
     })
 
 
+@login_required(redirect_field_name=None, login_url='/login')
 def watch(request, id):
     try:
         listing = Listing.objects.get(id=id)
     except:
         messages.error(request, 'Sorry, listing does not exist.')
         return HttpResponseRedirect(reverse("index"))
-
-    if not request.user.is_authenticated:
-        messages.error(request, 'Sorry, you must first log in to access your watchlist.')
-        return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
 
     user = User.objects.get(id=request.user.id)
     user_watchlist = Watchlist.objects.get(user_id=user.id)
@@ -151,6 +157,7 @@ def watch(request, id):
     return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
 
 
+@login_required(redirect_field_name=None, login_url='/login')
 def bid(request, id):
     try:
         listing = Listing.objects.get(id=id)
@@ -159,19 +166,11 @@ def bid(request, id):
         return HttpResponseRedirect(reverse("index"))
 
     if request.method == "POST":
-        if not request.user.is_authenticated:
-            messages.error(request, 'Sorry, you must log in before place a bid.')
-            return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
-
-        bid_form = CreateBidForm(request.POST)
+        bid_form = CreateBidForm(request.POST or None)
 
         if bid_form.is_valid():
             # Isolate the data from the 'cleaned' version of form data
             bid_offered = bid_form.cleaned_data["bid"]
-            # print(type(bid_offered))
-            # print(bid_offered)
-
-            # bid_offered = int(request.POST["bid"])
 
             if bid_offered > listing.current_price:
                 new_bid = Bid(price=bid_offered, listing_id=listing, user_id=User.objects.get(id=request.user.id))
@@ -188,6 +187,7 @@ def bid(request, id):
             return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
 
 
+@login_required(redirect_field_name=None, login_url='/login')
 def close(request, id):
     try:
         listing = Listing.objects.get(id=id)
@@ -196,10 +196,6 @@ def close(request, id):
         return HttpResponseRedirect(reverse("index"))
 
     if request.method == "GET":
-        if not request.user.is_authenticated:
-            messages.error(request, 'Sorry, you must first log in to close this listing.')
-            return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
-
         user = User.objects.get(id=request.user.id)
         if not user.username == str(listing.owner_user_id):
             messages.error(request, 'Sorry, you are not the owner of this listing.')
@@ -208,8 +204,8 @@ def close(request, id):
         listing_bids = Bid.objects.filter(listing_id=listing.id).order_by('-price')
         winner_user = User.objects.get(username=listing_bids[0].user_id)
 
-        listing.status = "close"
-        listing.winner_id = winner_user.id
+        listing.status = "closed"
+        listing.winner_id = winner_user
         listing.save()
 
         messages.success(request, 'Alright! You have closed this listing and declared the last bidder the winner!')
@@ -217,6 +213,7 @@ def close(request, id):
         return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
 
 
+@login_required(redirect_field_name=None, login_url='/login')
 def comment(request, id):
     try:
         listing = Listing.objects.get(id=id)
@@ -225,23 +222,22 @@ def comment(request, id):
         return HttpResponseRedirect(reverse("index"))
 
     if request.method == "POST":
-        if not request.user.is_authenticated:
-            messages.error(request, 'Sorry, you must log in before post a comment.')
-            return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
-
         user = User.objects.get(id=request.user.id)
 
-        new_comment = Comment(text=request.POST["comment"], listing_id=listing, user_id=user)
-        new_comment.save()
+        comment_form = CreateCommentForm(request.POST or None)
 
-        return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
+        if comment_form.is_valid():
+            new_comment = Comment(text=comment_form.cleaned_data["comment"], listing_id=listing, user_id=user)
+            new_comment.save()
+
+            return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
+        else:
+            messages.error(request, 'Sorry, invalid comment.')
+            return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
 
 
+@login_required(redirect_field_name=None, login_url='/login')
 def watchlist(request):
-    if not request.user.is_authenticated:
-        messages.error(request, 'Sorry, you must first log in to access your watchlist.')
-        return HttpResponseRedirect(reverse("index"))
-
     user = User.objects.get(id=request.user.id)
     user_watchlist = Watchlist.objects.filter(user_id=user.id)
 
