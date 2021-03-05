@@ -127,31 +127,6 @@ def email(request, email_id):
         }, status=400)
 
 
-def login_view(request):
-    if request.method == "POST":
-
-        # Attempt to sign user in
-        email = request.POST["email"]
-        password = request.POST["password"]
-        user = authenticate(request, username=email, password=password)
-
-        # Check if authentication successful
-        if user is not None:
-            login(request, user)
-            return HttpResponseRedirect(reverse("index"))
-        else:
-            return render(request, "mail/login.html", {
-                "message": "Invalid email and/or password."
-            })
-    else:
-        return render(request, "mail/login.html")
-
-
-def logout_view(request):
-    logout(request)
-    return HttpResponseRedirect(reverse("index"))
-
-
 def register(request):
     if request.method == "POST":
         email = request.POST["email"]
@@ -177,3 +152,28 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "mail/register.html")
+
+
+def login_view(request):
+    if request.method == "POST":
+
+        # Attempt to sign user in
+        email = request.POST["email"]
+        password = request.POST["password"]
+        user = authenticate(request, username=email, password=password)
+
+        # Check if authentication successful
+        if user is not None:
+            login(request, user)
+            return HttpResponseRedirect(reverse("index"))
+        else:
+            return render(request, "mail/login.html", {
+                "message": "Invalid email and/or password."
+            })
+    else:
+        return render(request, "mail/login.html")
+
+
+def logout_view(request):
+    logout(request)
+    return HttpResponseRedirect(reverse("index"))
