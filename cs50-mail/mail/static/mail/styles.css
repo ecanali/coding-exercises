@@ -1,3 +1,25 @@
 textarea {
     min-height: 400px;
 }
+
+div.container div#emails-view > div {
+    border: 1px solid black;
+    display: flex;
+
+    padding: 6px;
+    margin-bottom: 2px;
+}
+
+div#emails-view > div div:first-child {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+div#emails-view > div div:last-child {
+    margin: 0 0 0 auto;
+    color: grey;
+}
+
+.read-email {
+    background: #ddd;
+}
