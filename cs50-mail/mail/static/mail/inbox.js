@@ -128,25 +128,6 @@ async function load_mailbox(mailbox) {
   });
 }
 
-function send_email() {
-  fetch('/emails', {
-    method: 'POST',
-    body: JSON.stringify({
-        recipients: document.querySelector('#compose-recipients').value,
-        subject: document.querySelector('#compose-subject').value,
-        body: document.querySelector('#compose-body').value
-    })
-  })
-  .then(response => response.json())
-  .then(result => {
-      // Print result
-      console.log(result);
-
-      // Change to redirect to sent mailbox
-      load_mailbox('sent');
-  });
-}
-
 function archive_email() {
   const email_id = document.querySelector('#archive').dataset.emailid
 
@@ -171,4 +152,23 @@ function archive_email() {
   })
 
   load_mailbox('inbox');
+}
+
+function send_email() {
+  fetch('/emails', {
+    method: 'POST',
+    body: JSON.stringify({
+        recipients: document.querySelector('#compose-recipients').value,
+        subject: document.querySelector('#compose-subject').value,
+        body: document.querySelector('#compose-body').value
+    })
+  })
+  .then(response => response.json())
+  .then(result => {
+      // Print result
+      console.log(result);
+
+      // Change to redirect to sent mailbox
+      load_mailbox('sent');
+  });
 }
