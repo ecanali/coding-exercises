@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelector('#sent').addEventListener('click', () => load_mailbox('sent'));
   document.querySelector('#archived').addEventListener('click', () => load_mailbox('archive'));
   document.querySelector('#compose').addEventListener('click', compose_email);
-  document.querySelector('#compose-form').addEventListener('submit', () => send_email());
+  document.querySelector('#compose-form').addEventListener('submit', send_email);
 
   // By default, load the inbox
   load_mailbox('inbox');
@@ -44,6 +44,12 @@ function show_email(email_id) {
     timestamp.innerHTML = `<strong>Timestamp:</strong> ${email.timestamp}`;
     element.append(timestamp);
 
+    const reply_button = document.createElement('button');
+    reply_button.innerHTML = 'Reply';
+    reply_button.setAttribute('id', 'reply');
+    reply_button.className = 'btn btn-sm btn-outline-primary';
+    element.append(reply_button);
+
     // Archive/unarchive special logic
     const archive_button = document.createElement('button');
     if (email.archived === false) {
@@ -74,9 +80,9 @@ function show_email(email_id) {
       });
     }
 
-    // Listens click if user wants to archive/unarchive mail
+    // Listens click if user wants to archive/unarchive/reply mail
     document.querySelector('#archive').addEventListener('click', archive_email);
-
+    document.querySelector('#reply').addEventListener('click', () => reply_email(email));
   });
 }
 
@@ -92,7 +98,7 @@ function compose_email() {
   document.querySelector('#compose-body').value = '';
 }
 
-async function load_mailbox(mailbox) {  
+function load_mailbox(mailbox) {
   // Show the mailbox and hide other views
   document.querySelector('#emails-view').style.display = 'block';
   document.querySelector('#email-details').style.display = 'none';
@@ -108,7 +114,7 @@ async function load_mailbox(mailbox) {
     // Display the emails ...
     emails.forEach(email => {
       const element = document.createElement('div');
-      if (email.read === false) {
+      if (email.read === true) {
         element.classList.add('read-email');
       }
       const sender = document.createElement('div')
@@ -151,10 +157,39 @@ function archive_email() {
     }
   })
 
-  load_mailbox('inbox');
+  // Waits 0.2s to update db before load the page
+  setTimeout(function () {
+    load_mailbox('inbox');
+  }, 200);
 }
 
-function send_email() {
+function reply_email(email) {
+  // Show compose view and hide other views
+  document.querySelector('#emails-view').style.display = 'none';
+  document.querySelector('#email-details').style.display = 'none';
+  document.querySelector('#compose-view').style.display = 'block';
+
+  // Change the compose view name
+  document.querySelector('#compose-view').firstElementChild.innerHTML = "Reply Email";
+
+  // Pre-fill the recipient field with original sender email
+  document.querySelector('#compose-recipients').value = `${email.sender}`;
+
+  // Pre-fill the subject adding "Re: " when necessary
+  if (email.subject.includes("Re: ")) {
+    document.querySelector('#compose-subject').value = `${email.subject}`;
+  } else {
+    document.querySelector('#compose-subject').value = `Re: ${email.subject}`;
+  }
+
+  // Pre-fill the body with original message infos
+  document.querySelector('#compose-body').value = `\n\nOn ${email.timestamp} ${email.sender} wrote: \n${email.body}`;
+}
+
+function send_email(event) {
+  // Prevent default behavior of page reloading after submitting
+  event.preventDefault();
+
   fetch('/emails', {
     method: 'POST',
     body: JSON.stringify({
@@ -163,12 +198,7 @@ function send_email() {
         body: document.querySelector('#compose-body').value
     })
   })
-  .then(response => response.json())
-  .then(result => {
-      // Print result
-      console.log(result);
-
-      // Change to redirect to sent mailbox
-      load_mailbox('sent');
+  .then(() => {
+    load_mailbox('sent');
   });
 }
