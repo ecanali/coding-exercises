@@ -10,6 +10,54 @@ document.addEventListener('DOMContentLoaded', function() {
   load_mailbox('inbox');
 });
 
+function compose_email() {
+  // Show compose view and hide other views
+  document.querySelector('#emails-view').style.display = 'none';
+  document.querySelector('#email-details').style.display = 'none';
+  document.querySelector('#compose-view').style.display = 'block';
+
+  // Clear out composition fields
+  document.querySelector('#compose-recipients').value = '';
+  document.querySelector('#compose-subject').value = '';
+  document.querySelector('#compose-body').value = '';
+}
+
+function load_mailbox(mailbox) {
+  // Show the mailbox and hide other views
+  document.querySelector('#emails-view').style.display = 'block';
+  document.querySelector('#email-details').style.display = 'none';
+  document.querySelector('#compose-view').style.display = 'none';
+
+  // Show the mailbox name
+  document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
+
+  // Load the latest emails
+  fetch(`/emails/${mailbox}`)
+  .then(response => response.json())
+  .then(emails => {
+    // Display the emails ...
+    emails.forEach(email => {
+      const element = document.createElement('div');
+      if (email.read === true) {
+        element.classList.add('read-email');
+      }
+      const sender = document.createElement('div')
+      sender.innerHTML = email.sender
+      element.append(sender);
+      const subject = document.createElement('div')
+      subject.innerHTML = email.subject
+      element.append(subject);
+      const timestamp = document.createElement('div')
+      timestamp.innerHTML = email.timestamp
+      element.append(timestamp);
+      element.addEventListener('click', function() {
+        show_email(email.id);
+      });
+      document.querySelector('#emails-view').append(element);
+    });
+  });
+}
+
 function show_email(email_id) {
   // Show emails details and hide other views
   document.querySelector('#emails-view').style.display = 'none';
@@ -83,54 +131,6 @@ function show_email(email_id) {
     // Listens click if user wants to archive/unarchive/reply mail
     document.querySelector('#archive').addEventListener('click', archive_email);
     document.querySelector('#reply').addEventListener('click', () => reply_email(email));
-  });
-}
-
-function compose_email() {
-  // Show compose view and hide other views
-  document.querySelector('#emails-view').style.display = 'none';
-  document.querySelector('#email-details').style.display = 'none';
-  document.querySelector('#compose-view').style.display = 'block';
-
-  // Clear out composition fields
-  document.querySelector('#compose-recipients').value = '';
-  document.querySelector('#compose-subject').value = '';
-  document.querySelector('#compose-body').value = '';
-}
-
-function load_mailbox(mailbox) {
-  // Show the mailbox and hide other views
-  document.querySelector('#emails-view').style.display = 'block';
-  document.querySelector('#email-details').style.display = 'none';
-  document.querySelector('#compose-view').style.display = 'none';
-
-  // Show the mailbox name
-  document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
-
-  // Load the latest emails
-  fetch(`/emails/${mailbox}`)
-  .then(response => response.json())
-  .then(emails => {
-    // Display the emails ...
-    emails.forEach(email => {
-      const element = document.createElement('div');
-      if (email.read === true) {
-        element.classList.add('read-email');
-      }
-      const sender = document.createElement('div')
-      sender.innerHTML = email.sender
-      element.append(sender);
-      const subject = document.createElement('div')
-      subject.innerHTML = email.subject
-      element.append(subject);
-      const timestamp = document.createElement('div')
-      timestamp.innerHTML = email.timestamp
-      element.append(timestamp);
-      element.addEventListener('click', function() {
-        show_email(email.id);
-      });
-      document.querySelector('#emails-view').append(element);
-    });
   });
 }
 
