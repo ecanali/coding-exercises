@@ -1,0 +1,29 @@
+.body {
+    padding: 16px 8px;
+}
+
+.post-item {
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    padding: 20px;
+    margin-bottom: 8px;
+}
+
+.post-item form button {
+    margin-top: 8px;
+}
+
+.post-item span.timestamp {
+    display: block;
+    color: grey;
+}
+
+.post-item .likes {
+    display: flex;
+    align-items: center;
+}
+
+.post-item .likes .material-icons.redheart { 
+    color: red;
+    font-size: 18px
+}

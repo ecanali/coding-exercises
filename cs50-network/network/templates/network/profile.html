@@ -1,0 +1,34 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+    <h1>{{user_profile.username}}'s Profile</h1>
+    <h3>Followers: {{ followers }}</h3>
+    <h3>Following: {{ following }}</h3>
+
+    {% if user.is_authenticated and user.id != user_profile.id %}
+        <form action="{% url 'follow' user_profile.id %}">
+            {% if is_following == False %}
+                <button type="submit" class="btn btn-primary">Follow</button>
+            {% else %}
+                <button type="submit" class="btn btn-primary">Unfollow</button>
+            {% endif %}
+        </form>
+    {% endif %}
+    <hr>
+
+    <div class="all-posts">
+        <h2>All {{user_profile.username}}'s Posts</h2>
+        {% for post in user_posts %}
+            <div class="post-item">
+                <h3>{{ post.author }}</h3>
+                <p>{{ post.content }}</p>
+                <span class="timestamp">{{ post.timestamp }}</span>
+                <div class="likes">
+                    <span class="material-icons redheart">favorite_border</span>
+                    <span class="material-icons redheart">favorite</span>
+                    <span> 0</span>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
