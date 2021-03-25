@@ -13,6 +13,30 @@ class CreatePostForm(forms.Form):
     content = forms.CharField(widget=forms.Textarea(attrs={'placeholder': "What's happening?", "rows":2, 'class':'form-control'}), required=True, label='')
 
 
+def follow(request, user_id):
+    try:
+
+        # >>> INCLUIR VALIDAÇÃO BACK N DEIXAR PRÓPRIO USUÁRIO SE SEGUIR!
+
+        # get current user and target user to follow/unfollow
+        current_user = User.objects.get(id=request.user.id)
+        target_user = User.objects.get(id=user_id)
+
+        # remove if already following, else add the follower
+        if Follower.objects.filter(user=target_user, follower=current_user).exists():
+            Follower.objects.filter(user=target_user, follower=current_user).delete()
+        else:
+            add_follower = Follower(
+                user=target_user, 
+                follower=current_user
+            )
+            add_follower.save()
+    
+        return HttpResponseRedirect(reverse("profile", args=(target_user.username,)))
+    except User.DoesNotExist:
+        return HttpResponseRedirect(reverse("index"))
+
+
 def index(request):
     post_form = CreatePostForm(request.POST or None)
     
@@ -36,30 +60,6 @@ def index(request):
         "post_form": post_form,
         "posts": Post.objects.all().order_by('-id')
     })
-
-
-def follow(request, user_id):
-    try:
-
-        # >>> INCLUIR VALIDAÇÃO BACK N DEIXAR PRÓPRIO USUÁRIO SE SEGUIR!
-
-        # get current user and target user to follow/unfollow
-        current_user = User.objects.get(id=request.user.id)
-        target_user = User.objects.get(id=user_id)
-
-        # remove if already following, else add the follower
-        if Follower.objects.filter(user=target_user, follower=current_user).exists():
-            Follower.objects.filter(user=target_user, follower=current_user).delete()
-        else:
-            add_follower = Follower(
-                user=target_user, 
-                follower=current_user
-            )
-            add_follower.save()
-    
-        return HttpResponseRedirect(reverse("profile", args=(target_user.username,)))
-    except User.DoesNotExist:
-        return HttpResponseRedirect(reverse("index"))
 
 
 def login_view(request):
