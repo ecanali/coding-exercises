@@ -1,6 +1,8 @@
 from django import forms
 
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
@@ -15,14 +17,15 @@ class CreatePostForm(forms.Form):
 
 def follow(request, user_id):
     try:
-
-        # >>> INCLUIR VALIDAÇÃO BACK N DEIXAR PRÓPRIO USUÁRIO SE SEGUIR!
-
-        # get current user and target user to follow/unfollow
+        # Get current user and target user to follow/unfollow
         current_user = User.objects.get(id=request.user.id)
         target_user = User.objects.get(id=user_id)
 
-        # remove if already following, else add the follower
+        # Prevent user follows itself
+        if current_user == target_user:
+            return HttpResponseRedirect(reverse("index"))
+
+        # Remove if already following, else add the follower
         if Follower.objects.filter(user=target_user, follower=current_user).exists():
             Follower.objects.filter(user=target_user, follower=current_user).delete()
         else:
@@ -33,6 +36,7 @@ def follow(request, user_id):
             add_follower.save()
     
         return HttpResponseRedirect(reverse("profile", args=(target_user.username,)))
+
     except User.DoesNotExist:
         return HttpResponseRedirect(reverse("index"))
 
@@ -42,7 +46,6 @@ def index(request):
     
     if request.method == "POST":
         if not request.user.is_authenticated:
-            # messages.error(request, 'Sorry, you must log in before create a listing.')
             return HttpResponseRedirect(reverse("index"))
 
         user = User.objects.get(id=request.user.id)
@@ -56,9 +59,37 @@ def index(request):
 
             return HttpResponseRedirect(reverse("index"))
     else:
+        post_list = Post.objects.all().order_by('-id')
+        
+        paginator = Paginator(post_list, 2)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
         return render(request, "network/index.html", {
-        "post_form": post_form,
-        "posts": Post.objects.all().order_by('-id')
+            "post_form": post_form,
+            "page_obj": page_obj,
+        })
+
+
+@login_required(redirect_field_name=None, login_url='/login')
+def following(request):
+    current_user = User.objects.get(id=request.user.id)
+    following = Follower.objects.filter(follower=current_user)
+
+    posts = []
+    for follow in following:
+        following_user_posts = Post.objects.filter(author=follow.user)
+        for post in following_user_posts:
+            posts.append(post)
+
+    def get_post_id(post):
+        return post.id
+
+    # Sort posts list by most recent
+    posts.sort(reverse=True, key=get_post_id)
+
+    return render(request, "network/following.html", {
+        "posts": posts
     })
 
 
@@ -83,25 +114,35 @@ def login_view(request):
 
 
 def profile_view(request, username):
-    
-    # INCLUIR LÓGICA PARA USUÁRIO NÃO LOGADO ACESSAR PÁGINA
-    
-    # Query for requested user
     try:
         user = User.objects.get(username=username)
-        current_user = User.objects.get(id=request.user.id)
-        is_following = False
 
-        if Follower.objects.filter(user=user, follower=current_user).exists():
-            is_following = True
+        if request.user.is_authenticated:
+            try:
+                current_user = User.objects.get(id=request.user.id)
+                is_following = False
 
-        return render(request, "network/profile.html", {
-            "user_posts": Post.objects.filter(author_id=user).order_by('-id'),
-            "followers": len(Follower.objects.filter(user=user)),
-            "following": len(Follower.objects.filter(follower=user)),
-            "user_profile": user,
-            "is_following": is_following
-        })
+                if Follower.objects.filter(user=user, follower=current_user).exists():
+                    is_following = True
+
+                return render(request, "network/profile.html", {
+                    "user_posts": Post.objects.filter(author=user).order_by('-id'),
+                    "followers": len(Follower.objects.filter(user=user)),
+                    "following": len(Follower.objects.filter(follower=user)),
+                    "user_profile": user,
+                    "is_following": is_following
+                })
+            except User.DoesNotExist:
+                return HttpResponseRedirect(reverse("index"))
+
+        else:
+            return render(request, "network/profile.html", {
+                "user_posts": Post.objects.filter(author=user).order_by('-id'),
+                "followers": len(Follower.objects.filter(user=user)),
+                "following": len(Follower.objects.filter(follower=user)),
+                "user_profile": user
+            })
+
     except User.DoesNotExist:
         return HttpResponseRedirect(reverse("index"))
 
