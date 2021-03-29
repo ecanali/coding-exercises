@@ -15,32 +15,6 @@ class CreatePostForm(forms.Form):
     content = forms.CharField(widget=forms.Textarea(attrs={'placeholder': "What's happening?", "rows":2, 'class':'form-control'}), required=True, label='')
 
 
-def follow(request, user_id):
-    try:
-        # Get current user and target user to follow/unfollow
-        current_user = User.objects.get(id=request.user.id)
-        target_user = User.objects.get(id=user_id)
-
-        # Prevent user follows itself
-        if current_user == target_user:
-            return HttpResponseRedirect(reverse("index"))
-
-        # Remove if already following, else add the follower
-        if Follower.objects.filter(user=target_user, follower=current_user).exists():
-            Follower.objects.filter(user=target_user, follower=current_user).delete()
-        else:
-            add_follower = Follower(
-                user=target_user, 
-                follower=current_user
-            )
-            add_follower.save()
-    
-        return HttpResponseRedirect(reverse("profile", args=(target_user.username,)))
-
-    except User.DoesNotExist:
-        return HttpResponseRedirect(reverse("index"))
-
-
 def index(request):
     post_form = CreatePostForm(request.POST or None)
     
@@ -69,6 +43,32 @@ def index(request):
             "post_form": post_form,
             "page_obj": page_obj,
         })
+
+
+def follow(request, user_id):
+    try:
+        # Get current user and target user to follow/unfollow
+        current_user = User.objects.get(id=request.user.id)
+        target_user = User.objects.get(id=user_id)
+
+        # Prevent user follows itself
+        if current_user == target_user:
+            return HttpResponseRedirect(reverse("index"))
+
+        # Remove if already following, else add the follower
+        if Follower.objects.filter(user=target_user, follower=current_user).exists():
+            Follower.objects.filter(user=target_user, follower=current_user).delete()
+        else:
+            add_follower = Follower(
+                user=target_user, 
+                follower=current_user
+            )
+            add_follower.save()
+    
+        return HttpResponseRedirect(reverse("profile", args=(target_user.username,)))
+
+    except User.DoesNotExist:
+        return HttpResponseRedirect(reverse("index"))
 
 
 @login_required(redirect_field_name=None, login_url='/login')
