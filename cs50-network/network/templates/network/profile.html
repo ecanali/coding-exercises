@@ -18,9 +18,12 @@
 
     <div class="all-posts">
         <h2>All {{user_profile.username}}'s Posts</h2>
-        {% for post in user_posts %}
-            <div class="post-item">
+        {% for post in page_obj %}
+            <div id="{{post.id}}" class="post-item">
                 <h3>{{ post.author }}</h3>
+                {% if user.is_authenticated and user.id == user_profile.id %}
+                    <a class="edit-post" data-post="{{post.id}}" href="">Edit</a>
+                {% endif %}
                 <p>{{ post.content }}</p>
                 <span class="timestamp">{{ post.timestamp }}</span>
                 <div class="likes">
@@ -31,4 +34,34 @@
             </div>
         {% endfor %}
     </div>
+
+    <nav aria-label="Posts page navigation">
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                </li>
+            {% endif %}
+
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.number }}">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                </a>
+            </li>
+
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Next</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
 {% endblock %}

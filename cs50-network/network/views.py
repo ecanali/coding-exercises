@@ -33,9 +33,9 @@ def index(request):
 
             return HttpResponseRedirect(reverse("index"))
     else:
+        # Pagination logic
         post_list = Post.objects.all().order_by('-id')
-        
-        paginator = Paginator(post_list, 2)
+        paginator = Paginator(post_list, 10)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
 
@@ -88,14 +88,25 @@ def following(request):
     # Sort posts list by most recent
     posts.sort(reverse=True, key=get_post_id)
 
+    # Pagination logic
+    paginator = Paginator(posts, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     return render(request, "network/following.html", {
-        "posts": posts
+        "page_obj": page_obj
     })
 
 
 def profile_view(request, username):
     try:
         user = User.objects.get(username=username)
+
+        # Pagination logic
+        post_list = Post.objects.filter(author=user).order_by('-id') 
+        paginator = Paginator(post_list, 10)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
 
         if request.user.is_authenticated:
             try:
@@ -106,7 +117,7 @@ def profile_view(request, username):
                     is_following = True
 
                 return render(request, "network/profile.html", {
-                    "user_posts": Post.objects.filter(author=user).order_by('-id'),
+                    "page_obj": page_obj,
                     "followers": len(Follower.objects.filter(user=user)),
                     "following": len(Follower.objects.filter(follower=user)),
                     "user_profile": user,
@@ -117,7 +128,7 @@ def profile_view(request, username):
 
         else:
             return render(request, "network/profile.html", {
-                "user_posts": Post.objects.filter(author=user).order_by('-id'),
+                "page_obj": page_obj,
                 "followers": len(Follower.objects.filter(user=user)),
                 "following": len(Follower.objects.filter(follower=user)),
                 "user_profile": user
