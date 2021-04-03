@@ -9,8 +9,9 @@
     margin-bottom: 8px;
 }
 
-.post-item form button {
+.post-item form button, .btn.btn-primary {
     margin-top: 8px;
+    margin-bottom: 8px;
 }
 
 .post-item span.timestamp {
@@ -26,4 +27,9 @@
 .post-item .likes .material-icons.redheart { 
     color: red;
     font-size: 18px
+}
+
+a.disabled {
+    pointer-events: none;
+    color: grey;
 }

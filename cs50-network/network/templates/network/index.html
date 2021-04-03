@@ -16,15 +16,26 @@
     {% endif %}
 
     <div class="all-posts">
+        <h2>All {{user_profile.username}}'s Posts</h2>
         {% for post in page_obj %}
-            <div class="post-item">
-                <h3><a href="{% url 'profile' post.author %}">{{ post.author }}</a></h3>
+            <div id="{{ post.id }}" class="post-item">
+                <h3>{{ post.author }}</h3>
+                {% if user.is_authenticated and user.id == post.author.id %}
+                    <a class="edit-post" data-post="{{ post.id }}" href="">Edit</a>
+                {% endif %}
                 <p>{{ post.content }}</p>
                 <span class="timestamp">{{ post.timestamp }}</span>
                 <div class="likes">
                     <span class="material-icons redheart">favorite_border</span>
-                    <span class="material-icons redheart">favorite</span>
-                    <span> 0</span>
+                    <!-- <span class="material-icons redheart">favorite</span> -->
+                    <span name="likes-counter">0</span>
+                    {% if user.is_authenticated %}
+                        {% if post.id in liked_posts %}
+                            <a class="like-post" data-post="{{ post.id }}" href="">Unlike</a>
+                        {% else %}
+                            <a class="like-post" data-post="{{ post.id }}" href="">Like</a>
+                        {% endif %}
+                    {% endif %}
                 </div>
             </div>
         {% endfor %}

@@ -32,3 +32,15 @@ class Follower(models.Model):
             "user": self.user,
             "follower": self.follower
         }
+
+
+class Like(models.Model):
+    user = models.ForeignKey("User", on_delete=models.CASCADE, related_name="liker")
+    post = models.ForeignKey("Post", on_delete=models.CASCADE, related_name="post")
+    
+    def serialize(self):
+        return {
+            "id": self.id,
+            "user": self.user,
+            "post": self.post
+        }

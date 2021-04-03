@@ -4,9 +4,13 @@
     <h1>All Posts from Users I'm Following</h1>
 
     <div class="all-posts">
+        <h2>All {{user_profile.username}}'s Posts</h2>
         {% for post in page_obj %}
-            <div class="post-item">
-                <h3><a href="{% url 'profile' post.author %}">{{ post.author }}</a></h3>
+            <div id="{{ post.id }}" class="post-item">
+                <h3>{{ post.author }}</h3>
+                {% if user.is_authenticated and user.id == post.author.id %}
+                    <a class="edit-post" data-post="{{ post.id }}" href="">Edit</a>
+                {% endif %}
                 <p>{{ post.content }}</p>
                 <span class="timestamp">{{ post.timestamp }}</span>
                 <div class="likes">

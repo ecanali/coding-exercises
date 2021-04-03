@@ -1,14 +1,16 @@
+import json
 from django import forms
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
 
-from .models import User, Post, Follower
+from .models import User, Post, Follower, Like
 
 
 class CreatePostForm(forms.Form):
@@ -39,9 +41,24 @@ def index(request):
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
 
+        # Get list of liked posts
+        if request.user.is_authenticated:
+            user = User.objects.get(id=request.user.id)
+            posts_liked = Like.objects.filter(user=user)
+
+            liked_posts = []
+            for liked_post in posts_liked:
+                liked_posts.append(liked_post.post.id)
+            
+            return render(request, "network/index.html", {
+                "post_form": post_form,
+                "page_obj": page_obj,
+                "liked_posts": liked_posts
+            })
+
         return render(request, "network/index.html", {
             "post_form": post_form,
-            "page_obj": page_obj,
+            "page_obj": page_obj
         })
 
 
@@ -69,6 +86,30 @@ def follow(request, user_id):
 
     except User.DoesNotExist:
         return HttpResponseRedirect(reverse("index"))
+
+
+@login_required(redirect_field_name=None, login_url='/login')
+def like(request, post_id):
+    
+    # Query for requested post
+    try:
+        post = Post.objects.get(pk=post_id)
+    except Post.DoesNotExist:
+        return JsonResponse({"error": "Post not found."}, status=404)
+
+    current_user = User.objects.get(id=request.user.id)
+    
+    # Remove if already liking, else add the like
+    if Like.objects.filter(user=current_user, post=post).exists():
+        Like.objects.filter(user=current_user, post=post).delete()
+    else:
+        add_like = Like(
+            user=current_user, 
+            post=post
+        )
+        add_like.save()
+
+    return HttpResponse(status=204)
 
 
 @login_required(redirect_field_name=None, login_url='/login')
@@ -136,6 +177,34 @@ def profile_view(request, username):
 
     except User.DoesNotExist:
         return HttpResponseRedirect(reverse("index"))
+
+
+@csrf_exempt
+@login_required(redirect_field_name=None, login_url='/login')
+def edit(request, post_id):
+
+    # Query for requested post
+    try:
+        post = Post.objects.get(pk=post_id)
+    except Post.DoesNotExist:
+        return JsonResponse({"error": "Post not found."}, status=404)
+
+    # Update post content into database
+    if request.method == "PUT":
+        data = json.loads(request.body)
+
+        if data.get("content") is not None:
+            post.content = data["content"]
+
+        post.save()
+
+        return HttpResponse(status=204)
+
+    # Email must be via PUT
+    else:
+        return JsonResponse({
+            "error": "PUT request required."
+        }, status=400)
 
 
 def login_view(request):

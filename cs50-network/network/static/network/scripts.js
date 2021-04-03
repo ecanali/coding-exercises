@@ -1,26 +1,77 @@
+// Listen to any clicks on Edit Post
 document.addEventListener('DOMContentLoaded', function() {
-    editLinks = document.querySelectorAll('.edit-post')
+    editLinks = document.querySelectorAll('.edit-post');
     for (let link of editLinks) {
         link.addEventListener('click', (event) => editPost(event));
     }
-    // document.querySelector('#compose-form').addEventListener('submit', send_email);
+
+    likeLinks = document.querySelectorAll('.like-post');
+    for (let link of likeLinks) {
+        link.addEventListener('click', (event) => likePost(event));
+    }
 });
 
-
-// escutar click na anchor tag "Edit"
-// chama funcao que esconde P Tag com o Content e Cria um TextArea com o conteúdo
-
 function editPost(event) {
+    // Prevent standard anchor behavior of making a request
     event.preventDefault();
 
     // Hide original text
-    postDiv = document.getElementById(`${event.target.dataset.post}`)
-    pTag = postDiv.getElementsByTagName('p')[0]
+    postDiv = document.getElementById(`${event.target.dataset.post}`);
+    pTag = postDiv.getElementsByTagName('p')[0];
     pTag.style.display = 'none';
 
+    // Disable edit link preventing multiple textarea
+    editLink = postDiv.getElementsByTagName('a')[0]
+    editLink.className = 'disabled';
+
+    // Create a form to update the text
+    const form = document.createElement('form');
+
     // Create a textarea with the original text inside
-    const textArea = document.createElement('textarea')
-    textArea.value = pTag.innerHTML
+    const textArea = document.createElement('textarea');
+    textArea.value = pTag.innerHTML;
     textArea.className = 'form-control';
-    pTag.parentNode.insertBefore(textArea, pTag.nextSibling);
+    form.append(textArea);
+
+    // Create button to submit the updated text
+    const saveButton = document.createElement('input');
+    saveButton.setAttribute('type', 'submit');
+    saveButton.setAttribute('value', 'Save');
+    saveButton.dataset.post = event.target.dataset.post;
+    saveButton.className = 'btn btn-primary';
+    form.append(saveButton);
+
+    saveButton.onclick = (event) => { 
+        // Prevent standard submit behavior of reloading the page
+        event.preventDefault();
+
+        // Save the new post text into database
+        fetch(`/edit/${event.target.dataset.post}`, {
+            method: 'PUT',
+            body: JSON.stringify({
+                content: textArea.value
+            })
+        });
+
+        // Return the layout to the original with updated text
+        form.style.display = 'none';
+        pTag.innerHTML = textArea.value;
+        pTag.style.display = 'block';
+        editLink.classList.remove('disabled');
+    }
+
+    // Add the textarea form in the place of the post text
+    pTag.parentNode.insertBefore(form, pTag.nextSibling);
+}
+
+function likePost(event) {
+    // Prevent standard anchor behavior of making a request
+    event.preventDefault();
+
+    // alert(`Hello! ${event.target.dataset.post}`);
+
+    // Save the new like/unlike into database
+    fetch(`/like/${event.target.dataset.post}`)
+    
+
 }
