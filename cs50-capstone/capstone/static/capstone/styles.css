@@ -1,0 +1,383 @@
+:root {
+    --titles-color: #111111;
+}
+
+* {
+    font-family: 'Roboto', sans-serif;  
+    font-weight: 400;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    min-width: 940px;
+    align-items: center;
+}
+
+img {
+    object-fit: cover;
+}
+
+.content {
+    max-width: 70%;
+    min-width: 940px;
+    max-width: 940px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+    position: relative;
+}
+
+/* NAVIGATION */
+header {
+    max-width: 940px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+header nav {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 36px;
+    margin-bottom: 30px;
+}
+
+header nav a:first-child {
+    margin-right: 120px;
+    align-self: flex-end;
+}
+
+header nav a {
+    margin-right: 30px;
+    font-size: 16px;
+    line-height: 19px;
+    color: var(--titles-color)
+}
+
+.sublinhado:hover {
+    border-bottom: 1px solid;
+}
+
+.sublinhado.active {
+    font-weight: bold;
+}
+
+/* FILTER */
+.home-filter {
+    min-width: 345px;
+    display: grid;
+    grid-template-columns: 1fr 90px;
+    align-items: center;
+    grid-gap: 8px;
+    margin-left: 74px;
+}
+
+.home-filter input {
+    color: #999999;
+    border: 1px solid #DDDDDD;
+    padding: 10px 15px;
+    border-radius: 4px;
+    font-size: 14px;
+    line-height: 16px;
+    box-sizing: border-box;
+}
+
+.home-filter button {
+    background: #6558C3;
+    cursor: pointer;
+    color: #FFFFFF;
+    text-align: center;
+    padding: 9px 20px;
+    font-size: 16px;
+    line-height: 19px;
+    font-weight: bold;
+    border-radius: 4px;
+    border: none;
+}
+
+/* FOOTER */
+footer {
+    margin-top: auto;
+}
+
+.rodape {
+    background-color: #EEEEEE;
+    text-align: center;
+    padding: 20px;
+    font-size: 14px;
+    color: #999999;
+}
+
+/* MAIN DISPLAY */
+.bloco-inicial {
+    background-color: #FBDFDB;
+    min-width: 940px;
+    width: 100%;
+    height: 366px;
+    border-radius: 30px;
+    padding: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 50px;
+}
+
+.texto-inicial {
+    width: 500px;
+}
+
+.texto-inicial h1 {
+    font-size: 32px;
+    line-height: 38px;
+    font-weight: bold;
+    color: var(--titles-color);
+    margin-bottom: 10px;
+}
+
+.texto-inicial p {
+    opacity: 0.7;
+    font-size: 18px;
+    color: #000000;
+    line-height: 28px;
+    max-width: 316px;
+}
+
+.desenho-chef {
+    margin-right: 40px;
+    margin-top: 100px;
+}
+
+.desenho-chef img {
+    min-height: 300px;
+}
+
+/* "MAIS ACESSADAS" */
+section {
+    width: 100%;
+    max-width: 940px;
+}
+
+section h2 {
+    margin-bottom: 20px;
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 28px;
+    color: var(--titles-color);
+}
+
+.grid-receitas {
+    max-width: 940px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 30px 20px;
+    margin-bottom: 50px;
+}
+
+.recipes .grid-receitas {
+    max-width: 940px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 30px 20px;
+    margin: 20px auto 50px;
+}
+
+h2.h2-site {
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 28px;
+    color: var(--titles-color);
+    margin-bottom: 0px;
+    margin-top: 20px;
+}
+
+.receita {
+    width: 300px;
+    height: 202px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    cursor: pointer;
+}
+
+.receita img {
+    width: 300px;
+    height: 140px;
+    border-radius: 15px;
+    margin: 0;
+}
+
+.texto-receita {
+    margin-top: 20px;
+}
+
+.receita h3 {
+    font-size: 18px;
+    line-height: 21px;
+    color: var(--titles-color);
+}
+
+.receita p {
+    margin-top: 5px;
+    font-size: 14px;
+    line-height: 16px;
+    color: #777777;
+}
+
+/* RECIPES */
+main.recipes {
+    width: 940px;
+    margin-bottom: 50px;
+    display: flex;
+}
+
+.filtered-title {
+    align-self: flex-start;
+}
+
+/* RECIPE PAGE */
+main img {
+    border-radius: 15px;
+    margin: 20px auto 50px;
+    max-width: 940px;
+    max-height: 280px;
+}
+
+.detail-img {
+    margin-bottom: 30px;
+}
+
+.recipe-title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.recipe-title h1 {
+    font-size: 36px;
+    line-height: 42px;
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+.recipe-title h3 {
+    font-size: 20px;
+    line-height: 24px;
+    color: #777777;
+}
+
+.recipe-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    list-style-position: inside;
+    width: 940px;
+}
+
+.recipe-info h2 {
+    font-size: 24px;
+    line-height: 28px;
+    font-weight: bold;
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+.recipe-info li, ol {
+    line-height: 28px;
+    font-size: 18px;
+    color: #444444;
+}
+
+.recipe-info li:last-child, ol:last-child {
+    margin-bottom: 10px;
+}
+
+.recipe-info p {
+    font-size: 18px;
+    color: #444444;
+    line-height: 28px;
+    margin-bottom: 50px;
+}
+
+.button {
+    font-size: 12px;
+    line-height: 14px;
+    font-weight: bold;
+    color: #999999;
+    cursor: pointer;
+}
+
+.recipe-hide-show.hidden {
+    display: none;
+}
+
+/* PAGINATION */
+.pagination {
+    margin: 0;
+    align-self: center;
+    justify-self: center;
+}
+
+.pagination a,
+.pagination span {
+    color: var(--titles-color);
+    text-decoration: none;
+    margin-right: 18px;
+}
+
+.pagination a.active {
+    font-weight: bold;
+}
+
+.pagination a:hover {
+    filter: brightness(0.3);
+    border-bottom: 1px solid var(--titles-color);
+    font-weight: bold;
+}
+
+.about {
+    max-width: 940px;
+    display: flex;
+}
+
+.about h2 {
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 28px;
+    color: var(--titles-color); 
+    margin-top: 20px;
+    margin-bottom: 20px;
+    align-self: flex-start;
+}
+
+.about h3 {
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 24px;
+    color: var(--titles-color);
+    margin-bottom: 20px;
+    align-self: flex-start;
+}
+
+.about p {
+    font-size: 18px;
+    color: #444444;
+    line-height: 28px;
+    margin-bottom: 30px;
+}
+
+.about p:last-child {
+    margin-bottom: 50px;
+}

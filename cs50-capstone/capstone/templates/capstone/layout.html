@@ -1,0 +1,84 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>{% block title %}Foodfy{% endblock %}</title>
+        {# <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"> #}
+        <link href="{% static 'capstone/styles.css' %}" rel="stylesheet">
+        <link href="{% static 'capstone/assets/favicon.ico' %}" rel="icon">
+    </head>
+    <body>
+
+        <div class="content">
+            <header>
+                <nav>
+                    <a href="/"><img src="{% static 'capstone/assets/logo.png' %}" alt="logo-foodfy"></a>
+                    <a href="/about" class="sublinhado">Sobre</a>
+                    <a href="/recipes" class="sublinhado">Receitas</a>
+                    <a href="/chefs" class="sublinhado">Chefs</a>
+                    <a href="/admin/profile" class="sublinhado">Admin</a>
+
+                    <form action="/recipes/filter" method="get" class="home-filter">
+                        <input 
+                            type="text"
+                            name="filter"
+                            placeholder="Buscar uma receita"
+                            value="{{ filter }}"
+                        >
+                        <button type="submit">Buscar</button>
+                    </form>
+                </nav>
+            </header>
+
+            {% block body %}
+            {% endblock %}
+
+        </div>
+
+        <footer>
+            <div class="rodape">
+                <p>Todos direitos reservados, receitas Foodfy.</p>
+            </div>
+        </footer>
+
+        <script src="/scripts/site.js"></script>
+
+        <!-- <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">capstone</a>
+          
+            <div>
+              <ul class="navbar-nav mr-auto">
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><strong>{{ user.username }}</strong></a>
+                    </li>
+                {% endif %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'index' %}">All Posts</a>
+                </li>
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Following</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Log In</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'register' %}">Register</a>
+                    </li>
+                {% endif %}
+              </ul>
+            </div>
+          </nav>
+        
+        <div class="body">
+            {% block body2 %}
+            {% endblock %}
+        </div> -->
+    </body>
+</html>
