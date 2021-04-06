@@ -1,0 +1,61 @@
+{% extends '../layout.html' %}
+
+{% block title %}
+    Foodfy - Admin Minhas Receitas
+{% endblock title %}
+
+{% block body %}
+    <section>
+        <div class="header-index">
+            <h2 class="h2-admin">Gerenciar minhas receitas</h2>
+            <a href="{% url 'create' %}" class="admin-button-1">Nova receita</a>
+        </div>
+
+        <div class="grid-receitas-admin">
+            {% for recipe in recipes %}
+                <div class="receita-admin" id="{{ recipe.id }}">
+                    <!-- {% if not recipe.img %}
+                        <img src="http://placehold.it/940x280?text=RECEITA SEM FOTO" />
+                    {% else %}
+                        <img src="{{ recipe.img.src }}" alt="{{ recipe.title }}">
+                    {% endif %} -->
+
+                    {% for file in files %}
+                        {% if file.recipe == recipe %}
+                            <img src="{{ file.path }}" alt="{{ recipe.title }}">
+                        {% endif %}
+                    {% endfor %}
+
+                    <div class="texto-receita-admin">
+                        <h3>{{ recipe.title }}</h3>
+                        <p>por {{ recipe.chef }}</p>
+                        <a href="{% url 'myrecipe' recipe.id %}">Visualizar</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <script src="/scripts/lottie.min.js"></script>
+    
+    <script>
+        const deleteElement = document.querySelector('#delete-success-lottie')
+        lottie.loadAnimation({
+            container: deleteElement, // the dom element that will contain the animation
+            renderer: 'svg',
+            loop: false,
+            autoplay: true,
+            path: '/assets/6174-dustbin.json' // the path to the animation json
+        }).setSpeed(0.25)
+
+        const postElement = document.querySelector('#post-put-success-lottie')
+        lottie.loadAnimation({
+            container: postElement, // the dom element that will contain the animation
+            renderer: 'svg',
+            loop: false,
+            autoplay: true,
+            path: '/assets/25516-cooking.json' // the path to the animation json
+        }).setSpeed(1)
+    </script>
+
+{% endblock body %}

@@ -1,0 +1,76 @@
+{% extends '../layout.html' %}
+
+{% block title %}
+    Foodfy - Admin: {{ recipe.title }}
+{% endblock title %}
+
+{% block body %}
+    <main>
+        <div class="recipe-header-admin">
+            <h2>Receita: {{ recipe.title }}</h2>
+            <a href="{% url 'edit' recipe.id %}">Editar receita</a>
+        </div>
+        
+        <div class="gallery">
+            <div class="highlight">
+                {% for file in files %}
+                    {% if file.recipe == recipe %}
+                        <img 
+                            src="{{ file.path }}" 
+                            alt="{{ file.name }}"
+                        >
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <div class="gallery-preview">
+                {% for file in files %}
+                    {% if file.recipe == recipe %}
+                        <img 
+                            src="{{ file.path }}" 
+                            alt="{{ file.name }}"
+                            {% if loop.index0 == 0 %}
+                                class="active"
+                            {% endif %}
+                            onclick="ImageGallery.setImage(event)"
+                        >
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="recipe-title">
+            <h1>{{ recipe.title }}</h1>
+            <h3>por {{ recipe.chef }}</h3>
+        </div>
+        <div class="recipe-info">
+            <h2>Ingredientes</h2>
+            <div>
+                <p>{{ recipe.ingredients }}</p>
+            </div>
+            <h2>Modo de preparo</h2>
+            <div>
+                <p>{{ recipe.preparation }}</p>
+            </div>
+            <h2>Informações adicionais</h2>
+            <div>
+                <p>{{ recipe.information }}</p>
+            </div>
+        </div>
+    </main>
+
+    <script src="/scripts/lottie.min.js"></script>
+    
+    <script>
+        const element = document.querySelector('#post-put-success-lottie')
+        
+        lottie.loadAnimation({
+            container: element, // the dom element that will contain the animation
+            renderer: 'svg',
+            loop: false,
+            autoplay: true,
+            path: '/assets/25516-cooking.json' // the path to the animation json
+        }).setSpeed(1)
+    </script>
+
+{% endblock body %}
