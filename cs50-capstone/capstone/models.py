@@ -32,13 +32,14 @@ class File(models.Model):
     name = models.TextField(blank=True)
     path = models.TextField(blank=True)
     file = models.FileField(upload_to='capstone/static/capstone/images/', null=True)
-    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
-    
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name="files")
+
     def serialize(self):
         return {
             "id": self.id,
             "name": self.name,
             "path": self.path,
             "file": self.file,
-            "recipe": self.recipe
+            "recipe": self.recipe,
+            "recipes": self.recipes
         }

@@ -57,7 +57,7 @@ header nav {
 
 header nav a:first-child {
     margin-right: 120px;
-    align-self: flex-end;
+    /* align-self: flex-end; */
 }
 
 header nav a {
@@ -77,7 +77,7 @@ header nav a {
 
 /* FILTER */
 .home-filter {
-    min-width: 345px;
+    min-width: 353px;
     display: grid;
     grid-template-columns: 1fr 90px;
     align-items: center;
@@ -119,6 +119,7 @@ footer {
     padding: 20px;
     font-size: 14px;
     color: #999999;
+    margin-top: 20px;
 }
 
 /* MAIN DISPLAY */
@@ -323,30 +324,6 @@ main img {
     display: none;
 }
 
-/* PAGINATION */
-.pagination {
-    margin: 0;
-    align-self: center;
-    justify-self: center;
-}
-
-.pagination a,
-.pagination span {
-    color: var(--titles-color);
-    text-decoration: none;
-    margin-right: 18px;
-}
-
-.pagination a.active {
-    font-weight: bold;
-}
-
-.pagination a:hover {
-    filter: brightness(0.3);
-    border-bottom: 1px solid var(--titles-color);
-    font-weight: bold;
-}
-
 .about {
     max-width: 940px;
     display: flex;
@@ -463,13 +440,13 @@ nav.nav-admin {
     position: relative;
 }
 
-.nav-admin a {
+/* .nav-admin a {
     margin-right: 30px;
     font-weight: bold;
     font-size: 15px;
     line-height: 18px;
     color: #999999;
-}
+} */
 
 .nav-admin a.active {
     font-weight: bold;
@@ -477,7 +454,7 @@ nav.nav-admin {
 }
 
 .nav-admin a:first-child {
-    margin-right: 50px;
+    /* margin-right: 50px; */
 }
 
 .header-index {
@@ -803,4 +780,168 @@ form .item #photos-preview img {
 .gallery-preview img:hover,
 .gallery-preview img.active {
     opacity: 1;
+}
+
+/* PAGINATION */
+.pagination {
+    display: -ms-flexbox;
+    display: flex;
+    padding-left: 0;
+    list-style: none;
+    border-radius: .25rem;
+}
+
+.page-link {
+    position: relative;
+    display: block;
+    padding: .5rem .75rem;
+    margin-left: -1px;
+    line-height: 1.25;
+    color: var(--titles-color);
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+}
+
+.page-link:hover {
+    z-index: 2;
+    color: var(--titles-color);
+    text-decoration: none;
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+}
+
+.page-item.disabled .page-link {
+    color: #6c757d;
+    pointer-events: none;
+    cursor: auto;
+    background-color: #fff;
+    border-color: #dee2e6;
+}
+
+.page-item:first-child .page-link {
+    margin-left: 0;
+    border-top-left-radius: .25rem;
+    border-bottom-left-radius: .25rem;
+}
+
+.page-item:last-child .page-link {
+    border-top-right-radius: .25rem;
+    border-bottom-right-radius: .25rem;
+}
+
+/* RESPONSIVE */
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px) {   
+    main {
+        display: flex;
+        flex-direction: column;
+        min-width: 320px;
+        align-items: center;
+    }
+    
+    .content {
+        max-width: 95%;
+        min-width: 320px;
+        max-width: 320px;
+        display: flex;
+        flex-direction: column;
+        overflow-wrap: break-word;
+        align-items: center;
+        margin: 0 auto;
+        position: relative;
+    }
+
+    header {
+        max-width: 320px;
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+    }
+
+    main.about {
+        max-width: 320px;
+
+    }
+
+    header nav {
+        display: flex;
+        flex-direction: column;
+        margin: 0 auto;
+    }
+
+    header nav a:first-child {
+        margin-right: 0px;
+    }
+
+    header nav a {
+        margin-right: 0px;
+        margin-top: 10px;
+    }
+    .home-filter {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 10px;
+        min-width: 0px;
+        margin-left: 0px;
+    }
+
+    main.recipes {
+        width: 320px;
+        margin-bottom: 50px;
+        display: flex;
+    }
+
+    .recipes .grid-receitas {
+        max-width: 320px;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 30px 20px;
+        margin: 20px auto 50px;
+    }
+
+    .about p {
+        max-width: 90%;
+    }
+
+    .about h3, .about h2 {
+        font-weight: bold;
+        font-size: 20px;
+        line-height: 24px;
+        color: var(--titles-color);
+        margin-bottom: 20px;
+        align-self: auto;
+    }
+
+    .bloco-inicial {
+        max-width: 320px;
+        min-width: 320px;
+        /* width: 100%; */
+        height: 100%;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    .texto-inicial {
+        width: 300px;
+    }
+
+    .desenho-chef {
+        margin-right: 0px;
+        margin-top: 0px;
+    }
+
+    .grid-receitas {
+        max-width: 320px;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 30px 20px;
+        margin: 20px auto 50px;
+    }
+
+    .receita {
+        margin: 0px auto;
+    }
 }

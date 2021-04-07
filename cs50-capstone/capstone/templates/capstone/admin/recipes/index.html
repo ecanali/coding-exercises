@@ -1,7 +1,7 @@
 {% extends '../layout.html' %}
 
 {% block title %}
-    Foodfy - Admin Minhas Receitas
+    RecipeLib - Admin Minhas Receitas
 {% endblock title %}
 
 {% block body %}
@@ -12,7 +12,7 @@
         </div>
 
         <div class="grid-receitas-admin">
-            {% for recipe in recipes %}
+            {% for recipe in page_obj %}
                 <div class="receita-admin" id="{{ recipe.id }}">
                     <!-- {% if not recipe.img %}
                         <img src="http://placehold.it/940x280?text=RECEITA SEM FOTO" />
@@ -36,26 +36,34 @@
         </div>
     </section>
 
-    <script src="/scripts/lottie.min.js"></script>
-    
-    <script>
-        const deleteElement = document.querySelector('#delete-success-lottie')
-        lottie.loadAnimation({
-            container: deleteElement, // the dom element that will contain the animation
-            renderer: 'svg',
-            loop: false,
-            autoplay: true,
-            path: '/assets/6174-dustbin.json' // the path to the animation json
-        }).setSpeed(0.25)
+    <nav aria-label="Recipes page navigation">
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                </li>
+            {% endif %}
 
-        const postElement = document.querySelector('#post-put-success-lottie')
-        lottie.loadAnimation({
-            container: postElement, // the dom element that will contain the animation
-            renderer: 'svg',
-            loop: false,
-            autoplay: true,
-            path: '/assets/25516-cooking.json' // the path to the animation json
-        }).setSpeed(1)
-    </script>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.number }}">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                </a>
+            </li>
+
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Next</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
 
 {% endblock body %}

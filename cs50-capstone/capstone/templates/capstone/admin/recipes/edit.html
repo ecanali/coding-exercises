@@ -1,20 +1,17 @@
 {% extends "../layout.html" %}
 
 {% block title %}
-    Foodfy - Admin: {{ recipe.title }}
+    RecipeLib - Admin: {{ recipe.title }}
 {% endblock title %}
 
 {% block body %}
     <main>
-        <form enctype="multipart/form-data">
-            {% csrf_token %}
-
+        <form action="{% url 'edit' recipe.id %}" method="POST" enctype="multipart/form-data">
             <div class="recipe-header-admin">
                 <h2>Editando receita</h2>
                 
                 <div class="admin-buttons">
-                    <!-- <button id="form-update" data-recipe="{{ recipe.id }}" class="admin-button-1" type="submit">Salvar receita</button> -->
-                    <a id="form-update" data-recipe="{{ recipe.id }}" class="admin-button-1">Salvar receita</a>
+                    <input id="form-update" type="submit" data-recipe="{{ recipe.id }}" class="admin-button-1" value="Salvar receita">
                 </div>
             </div>
 
@@ -135,10 +132,8 @@
 
         </form>
         
-        <form id="form-delete" action="/admin/recipes?_method=DELETE" method="POST">
-            <input type="hidden" name="id" value="{{ recipe.id }}">
+        <form action="{% url 'delete' recipe.id %}" method="POST">
             <button class="admin-button-2" type="submit">Deletar</button>
         </form>
     </main>
-
 {% endblock body %}

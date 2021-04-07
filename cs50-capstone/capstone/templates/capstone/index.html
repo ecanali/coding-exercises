@@ -15,23 +15,15 @@
     </main>
 
     <section>
-        <h2>Mais acessadas</h2>
+        <h2>Mais recentes</h2>
         <div class="grid-receitas">
             {% for recipe in recipes %}
                 <div class="receita" id="{{ recipe.id }}">
-                    <!-- {% if not recipe.img %}
-                        <img src="http://placehold.it/940x280?text=RECEITA SEM FOTO" />
-                    {% else %}
-                        <img src="capstone/images/recipe-placeholder3.png" alt="{{ recipe.title }}">
-                    {% endif %}-->
-
                     {% for file in files %}
                         {% if file.recipe == recipe %}
                             <img src="{{ file.path }}" alt="{{ recipe.title }}">
                         {% endif %}
                     {% endfor %}
-
-                    {# <img src="{{ file.path }}" alt="{{ recipe.title }}"> #}
 
                     <div class="texto-receita">
                         <h3>{{ recipe.title }}</h3>

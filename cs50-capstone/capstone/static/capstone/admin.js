@@ -1,55 +1,3 @@
-// // visually shows the current page on navigation menu
-// const currentPage = location.pathname
-// const menuItems = document.querySelectorAll('.nav-admin a')
-
-// for (let item of menuItems) {
-//     if (currentPage.includes(item.getAttribute('href'))) {
-//         item.classList.add('active')
-//     }
-// }
-
-// // adds extra fields on recipe Ingredients
-// function addIngredient() {
-//     const ingredients = document.querySelector('#ingredients')
-//     const fieldContainer = document.querySelectorAll('.ingredient')
-
-//     // clone from the last ingredient added
-//     const newField = fieldContainer[fieldContainer.length - 1].cloneNode(true)
-
-//     // prevents add new input field if last one were empty
-//     if (newField.children[0].value == "") return false
-
-//     // turns the input value empty
-//     newField.children[0].value = ""
-//     ingredients.appendChild(newField)
-// }
-
-// // listens the click on add new ingredient button IF it exists on the page
-// const addIngredientButton = document.querySelector('.add-ingredient')
-// if (addIngredientButton)
-//     addIngredientButton.addEventListener('click', addIngredient)
-
-// // adds extra fields on recipe Preparation Mode
-// function addStep() {
-//     const steps = document.querySelector('#steps')
-//     const fieldContainer = document.querySelectorAll('.step')
-
-//     // clone from the last ingredient added
-//     const newField = fieldContainer[fieldContainer.length - 1].cloneNode(true)
-
-//     // prevents add new input field if last one were empty
-//     if (newField.children[0].value == "") return false
-
-//     // turns the input value empty
-//     newField.children[0].value = ""
-//     steps.appendChild(newField)
-// }
-
-// // listens the click on add new step button IF it exists on the page
-// const addStepButton = document.querySelector('.add-step')
-// if (addStepButton)
-//     addStepButton.addEventListener('click', addStep)
-
 // IMAGES MANAGER
 const PhotosUpload = {
     input: "",
@@ -175,14 +123,12 @@ const ImageGallery = {
     }
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    saveButton = document.querySelector('#form-update')
-    saveButton.onclick = (event) => { 
-        // Prevent standard submit behavior of reloading the page
-        // event.preventDefault();
-
+saveButton = document.querySelector('#form-update')
+if (saveButton) {
+    saveButton.onclick = () => { 
+    
         // Save the updates into database
-        fetch(`admin/myrecipes/${event.target.dataset.recipe}/edit`, {
+        fetch(`edit`, {
             method: 'PUT',
             body: JSON.stringify({
                 title: document.querySelector('[name="title"]').value,
@@ -193,45 +139,4 @@ document.addEventListener('DOMContentLoaded', function() {
             })
         })
     }
-})
-
-
-// // FIELDS VALIDATION
-// const Validate = {
-//     apply(input, func) {
-//         Validate.clearErrors(input)
-        
-//         let results = Validate[func](input.value)
-//         input.value = results.value
-
-//         if (results.error)
-//             Validate.displayError(input, results.error)
-//     },
-//     displayError(input, error) {
-//         const div = document.createElement('div')
-//         div.classList.add('error')
-//         div.innerHTML = error
-//         input.parentNode.appendChild(div)
-
-//         // prevents the user from leaving the field with an error
-//         input.focus()
-//     },
-//     clearErrors(input) {
-//         const errorDiv = input.parentNode.querySelector('.error')
-
-//         if (errorDiv)
-//             errorDiv.remove()
-//     },
-//     isEmail(value) {
-//         let error = null
-//         const mailFormat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
-
-//         if (!value.match(mailFormat))
-//             error = "Email inválido"
-
-//         return {
-//             error,
-//             value
-//         }
-//     }
-// }
+}

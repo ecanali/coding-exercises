@@ -1,7 +1,7 @@
 {% extends '../layout.html' %}
 
 {% block title %}
-    Foodfy - Admin: {{ recipe.title }}
+    RecipeLib - Admin: {{ recipe.title }}
 {% endblock title %}
 
 {% block body %}
@@ -13,14 +13,10 @@
         
         <div class="gallery">
             <div class="highlight">
-                {% for file in files %}
-                    {% if file.recipe == recipe %}
-                        <img 
-                            src="{{ file.path }}" 
-                            alt="{{ file.name }}"
-                        >
-                    {% endif %}
-                {% endfor %}
+                <img 
+                    src="{{ first_file.path }}" 
+                    alt="{{ first_file.name }}"
+                >
             </div>
 
             <div class="gallery-preview">
@@ -29,7 +25,7 @@
                         <img 
                             src="{{ file.path }}" 
                             alt="{{ file.name }}"
-                            {% if loop.index0 == 0 %}
+                            {% if forloop.first %}
                                 class="active"
                             {% endif %}
                             onclick="ImageGallery.setImage(event)"
@@ -58,19 +54,4 @@
             </div>
         </div>
     </main>
-
-    <script src="/scripts/lottie.min.js"></script>
-    
-    <script>
-        const element = document.querySelector('#post-put-success-lottie')
-        
-        lottie.loadAnimation({
-            container: element, // the dom element that will contain the animation
-            renderer: 'svg',
-            loop: false,
-            autoplay: true,
-            path: '/assets/25516-cooking.json' // the path to the animation json
-        }).setSpeed(1)
-    </script>
-
 {% endblock body %}
