@@ -20,15 +20,6 @@
             <div class="item">
                 <h4>Usuário</h4>
                 <div>
-                    <!-- <input
-                        autofocus
-                        type="text"
-                        name="email"
-                        value="{{ user.email }}"
-                        placeholder="Digite seu email" 
-                        onblur="Validate.apply(this, 'isEmail')"
-                        required
-                    > -->
                     <input 
                         autofocus 
                         type="text" 
@@ -71,27 +62,12 @@
                 </div>
             </div>
             
-            <!-- <div class="item">
-                <h4>Repetir senha</h4>
-                <div class="input">
-                    <input 
-                        type="password"
-                        name="passwordRepeat"
-                        placeholder="Repita a nova senha"
-                    >
-                </div>
-            </div>
-        
-            <input type="hidden" name="token" value="{{ token }}"> -->
-                        
             <div class="login-fields">
                 <a href="{% url 'login' %}">Já tem uma conta?</a>
 
                 <div class="admin-buttons">
                     <button class="admin-button-1" type="submit">Registrar</button>
                 </div>
-                <!-- <input class="btn btn-primary" type="submit" value="Login"> -->
-
             </div>
 
             <input 

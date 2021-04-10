@@ -29,6 +29,10 @@ def index(request):
     })
 
 
+def about(request):
+    return render(request, "capstone/about.html")
+
+
 def recipes(request):
     # Pagination logic
     recipes_list = Recipe.objects.all().order_by('-id')
@@ -56,10 +60,6 @@ def recipe(request, id):
         'files': recipe.files.all(),
         'first_file': recipe.files.first()
     })
-
-
-def about(request):
-    return render(request, "capstone/about.html")
 
 
 def filter(request):

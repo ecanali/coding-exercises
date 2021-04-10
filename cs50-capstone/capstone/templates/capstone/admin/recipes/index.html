@@ -14,12 +14,6 @@
         <div class="grid-receitas-admin">
             {% for recipe in page_obj %}
                 <div class="receita-admin" id="{{ recipe.id }}">
-                    <!-- {% if not recipe.img %}
-                        <img src="http://placehold.it/940x280?text=RECEITA SEM FOTO" />
-                    {% else %}
-                        <img src="{{ recipe.img.src }}" alt="{{ recipe.title }}">
-                    {% endif %} -->
-
                     {% for file in files %}
                         {% if file.recipe == recipe %}
                             <img src="{{ file.path }}" alt="{{ recipe.title }}">
@@ -36,7 +30,7 @@
         </div>
     </section>
 
-    <nav aria-label="Recipes page navigation">
+    <nav class="admin-pagination" aria-label="Recipes page navigation">
         <ul class="pagination">
             {% if page_obj.has_previous %}
                 <li class="page-item">
@@ -65,5 +59,4 @@
             {% endif %}
         </ul>
     </nav>
-
 {% endblock body %}

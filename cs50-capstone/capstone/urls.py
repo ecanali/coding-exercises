@@ -11,10 +11,9 @@ urlpatterns = [
     path("admin/login", views.login_view, name="login"),
     path("admin/register", views.register, name="register"),
     path("admin/logout", views.logout_view, name="logout"),
-    path("admin/logout", views.logout_view, name="logout"),
     path("admin/myrecipes", views.myrecipes, name="myrecipes"),
     path("admin/myrecipes/<int:id>", views.myrecipe, name="myrecipe"),
     path("admin/myrecipes/create", views.create_view, name="create"),
     path("admin/myrecipes/<int:id>/edit", views.edit_view, name="edit"),
-    path("admin/myrecipes/<int:id>/delete", views.delete, name="delete"),
+    path("admin/myrecipes/<int:id>/delete", views.delete, name="delete")
 ]

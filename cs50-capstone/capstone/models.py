@@ -40,6 +40,5 @@ class File(models.Model):
             "name": self.name,
             "path": self.path,
             "file": self.file,
-            "recipe": self.recipe,
-            "recipes": self.recipes
+            "recipe": self.recipe
         }

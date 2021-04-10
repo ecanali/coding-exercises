@@ -57,7 +57,6 @@ header nav {
 
 header nav a:first-child {
     margin-right: 120px;
-    /* align-self: flex-end; */
 }
 
 header nav a {
@@ -165,7 +164,7 @@ footer {
     min-height: 300px;
 }
 
-/* "MAIS ACESSADAS" */
+/* MAIS RECENTES */
 section {
     width: 100%;
     max-width: 940px;
@@ -440,21 +439,9 @@ nav.nav-admin {
     position: relative;
 }
 
-/* .nav-admin a {
-    margin-right: 30px;
-    font-weight: bold;
-    font-size: 15px;
-    line-height: 18px;
-    color: #999999;
-} */
-
 .nav-admin a.active {
     font-weight: bold;
     color: #FFFFFF;
-}
-
-.nav-admin a:first-child {
-    /* margin-right: 50px; */
 }
 
 .header-index {
@@ -846,8 +833,6 @@ form .item #photos-preview img {
         flex-direction: column;
         overflow-wrap: break-word;
         align-items: center;
-        margin: 0 auto;
-        position: relative;
     }
 
     header {
@@ -895,8 +880,6 @@ form .item #photos-preview img {
         max-width: 320px;
         display: grid;
         grid-template-columns: 1fr;
-        gap: 30px 20px;
-        margin: 20px auto 50px;
     }
 
     .about p {
@@ -904,18 +887,12 @@ form .item #photos-preview img {
     }
 
     .about h3, .about h2 {
-        font-weight: bold;
-        font-size: 20px;
-        line-height: 24px;
-        color: var(--titles-color);
-        margin-bottom: 20px;
         align-self: auto;
     }
 
     .bloco-inicial {
-        max-width: 320px;
-        min-width: 320px;
-        /* width: 100%; */
+        max-width: 300px;
+        min-width: 300px;
         height: 100%;
         padding: 20px;
         display: flex;
@@ -937,11 +914,128 @@ form .item #photos-preview img {
         max-width: 320px;
         display: grid;
         grid-template-columns: 1fr;
-        gap: 30px 20px;
-        margin: 20px auto 50px;
     }
 
     .receita {
         margin: 0px auto;
+    }
+
+    section h2 {
+        text-align: center;
+    }
+
+    .gallery {
+        margin-top: 10px;
+    }
+
+    .recipe-info {
+        width: 300px;
+    }
+
+    .highlight {
+        width: 320px;
+    }
+
+    .gallery-preview {
+        width: 320px;
+        height: 60px;
+    }
+
+    nav.nav-admin {
+        min-width: 320px;
+    }
+
+    header.nav-admin {
+        height: 100%;
+        margin-bottom: 30px;
+    }
+
+    .logout-form {
+        min-width: 35px;
+        position: relative;
+        right: 0;
+        margin: 10px 0px;
+    }
+
+    .header-index {
+        display: flex;
+        flex-direction: column;
+    }
+
+    h2.h2-admin {
+        margin-bottom: 15px;
+    }
+
+    .grid-receitas-admin {
+        max-width: 320px;
+        grid-template-columns: 1fr;
+    }
+
+    .receita-admin img {
+        width: 160px;
+        border-radius: 8.57px;
+        margin: 0px 10px 0px 0px;
+    }
+
+    .receita-admin {
+        padding: 5px;
+    }
+
+    .admin-pagination {
+        margin-bottom: 30px;
+    }
+
+    .recipe-header-admin {
+        flex-direction: column;
+        margin-bottom: 80px;
+    }
+
+    .recipe-header-admin h2 {
+        margin-bottom: 15px;
+    }
+
+    button.admin-button-2 {
+        top: 100px;
+        left: 115px;
+    }
+
+    form {
+        min-width: 320px;
+    }
+
+    form .item #photos-preview {
+        display: none;
+    }
+
+    form .item .image-box {
+        display: flex;
+        flex-direction: column;
+        margin-left: 0px;
+    }
+
+    #photos-preview .photo {
+        position: relative;
+    }
+
+    .item div {
+        width: 95%;
+        margin-left: 10px;
+    }
+
+    .item > h4 {
+        margin-left: 10px;
+    }
+
+    .login-form {
+        max-width: 320px;
+        min-width: 320px;
+    }
+
+    .login-fields {
+        flex-direction: column;
+    }
+
+    .login-fields a {
+        margin-bottom: 15px;
     }
 }

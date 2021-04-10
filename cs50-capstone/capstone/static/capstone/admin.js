@@ -123,6 +123,7 @@ const ImageGallery = {
     }
 }
 
+// PUT to edit recipe
 saveButton = document.querySelector('#form-update')
 if (saveButton) {
     saveButton.onclick = () => { 

@@ -6,10 +6,6 @@
 
 {% block body %}
     <main>
-        {% if message %}
-            <div style="color:red;margin-bottom:10px;">{{ message }}</div>
-        {% endif %}
-
         <form action="{% url 'create' %}" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
 
