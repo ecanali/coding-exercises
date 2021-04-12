@@ -17,7 +17,6 @@
     <hr>
 
     <div class="all-posts">
-        <h2>All {{user_profile.username}}'s Posts</h2>
         {% for post in page_obj %}
             <div id="{{ post.id }}" class="post-item">
                 <h3>{{ post.author }}</h3>
@@ -27,9 +26,20 @@
                 <p>{{ post.content }}</p>
                 <span class="timestamp">{{ post.timestamp }}</span>
                 <div class="likes">
-                    <span class="material-icons redheart">favorite_border</span>
-                    <span class="material-icons redheart">favorite</span>
-                    <span> 0</span>
+                    {% if user.is_authenticated %}
+                        {% if post.id in liked_posts %}
+                            <span class="material-icons redheart">favorite</span>
+                            <span class="counter">{{ post.likes }}</span>
+                            <a class="like-post" data-post="{{ post.id }}" href="">Unlike</a>
+                        {% else %}
+                            <span class="material-icons redheart">favorite_border</span>
+                            <span class="counter">{{ post.likes }}</span>
+                            <a class="like-post" data-post="{{ post.id }}" href="">Like</a>
+                        {% endif %}
+                    {% else %}
+                        <span class="material-icons redheart">favorite_border</span>
+                        <span class="counter">{{ post.likes }}</span>
+                    {% endif %}
                 </div>
             </div>
         {% endfor %}

@@ -1,4 +1,4 @@
-// Listen to any clicks on Edit Post
+// Listen to any clicks on Edit Post and Like Post
 document.addEventListener('DOMContentLoaded', function() {
     editLinks = document.querySelectorAll('.edit-post');
     for (let link of editLinks) {
@@ -21,8 +21,8 @@ function editPost(event) {
     pTag.style.display = 'none';
 
     // Disable edit link preventing multiple textarea
-    editLink = postDiv.getElementsByTagName('a')[0]
-    editLink.className = 'disabled';
+    editLink = postDiv.querySelector('.edit-post')
+    editLink.classList.add('disabled');
 
     // Create a form to update the text
     const form = document.createElement('form');
@@ -68,10 +68,25 @@ function likePost(event) {
     // Prevent standard anchor behavior of making a request
     event.preventDefault();
 
-    // alert(`Hello! ${event.target.dataset.post}`);
-
     // Save the new like/unlike into database
-    fetch(`/like/${event.target.dataset.post}`)
+    fetch(`/like/${event.target.dataset.post}`);
     
+    // Update the like icon preparation
+    postDiv = document.getElementById(`${event.target.dataset.post}`);
+    icon = postDiv.querySelector('.material-icons');
 
+    // Update the like counter preparation
+    counter = postDiv.querySelector('.counter');
+    num_counter = parseInt(counter.innerHTML);
+
+    // Update the link text, icon and counter accordingly
+    if (event.target.innerHTML == 'Like') {
+        event.target.innerHTML = 'Unlike';
+        icon.innerHTML = 'favorite';
+        counter.innerHTML = num_counter + 1;
+    } else {
+        event.target.innerHTML = 'Like';
+        icon.innerHTML = 'favorite_border';
+        counter.innerHTML = num_counter - 1;
+    }
 }

@@ -62,6 +62,121 @@ def index(request):
         })
 
 
+def profile_view(request, username):
+    try:
+        user = User.objects.get(username=username)
+
+        # Pagination logic
+        post_list = Post.objects.filter(author=user).order_by('-id') 
+        paginator = Paginator(post_list, 10)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
+        if request.user.is_authenticated:
+            try:
+                current_user = User.objects.get(id=request.user.id)
+                is_following = False
+
+                if Follower.objects.filter(user=user, follower=current_user).exists():
+                    is_following = True
+
+                # Get list of liked posts
+                posts_liked = Like.objects.filter(user=current_user)
+                liked_posts = []
+                for liked_post in posts_liked:
+                    liked_posts.append(liked_post.post.id)
+
+                return render(request, "network/profile.html", {
+                    "page_obj": page_obj,
+                    "followers": len(Follower.objects.filter(user=user)),
+                    "following": len(Follower.objects.filter(follower=user)),
+                    "user_profile": user,
+                    "is_following": is_following,
+                    "liked_posts": liked_posts
+                })
+            except User.DoesNotExist:
+                return HttpResponseRedirect(reverse("index"))
+
+        else:
+            return render(request, "network/profile.html", {
+                "page_obj": page_obj,
+                "followers": len(Follower.objects.filter(user=user)),
+                "following": len(Follower.objects.filter(follower=user)),
+                "user_profile": user
+            })
+
+    except User.DoesNotExist:
+        return HttpResponseRedirect(reverse("index"))
+
+
+@login_required(redirect_field_name=None, login_url='/login')
+def following(request):
+    current_user = User.objects.get(id=request.user.id)
+    following = Follower.objects.filter(follower=current_user)
+
+    posts = []
+    for follow in following:
+        following_user_posts = Post.objects.filter(author=follow.user)
+        for post in following_user_posts:
+            posts.append(post)
+
+    def get_post_id(post):
+        return post.id
+
+    # Sort posts list by most recent
+    posts.sort(reverse=True, key=get_post_id)
+
+    # Pagination logic
+    paginator = Paginator(posts, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    # Get list of liked posts
+    posts_liked = Like.objects.filter(user=current_user)
+    liked_posts = []
+    for liked_post in posts_liked:
+        liked_posts.append(liked_post.post.id)
+
+    return render(request, "network/following.html", {
+        "page_obj": page_obj,
+        "liked_posts": liked_posts
+    })
+
+
+@csrf_exempt
+@login_required(redirect_field_name=None, login_url='/login')
+def edit(request, post_id):
+
+    # Query for requested post
+    try:
+        post = Post.objects.get(pk=post_id)
+    except Post.DoesNotExist:
+        return JsonResponse({"error": "Post not found."}, status=404)
+
+    # Ensure a user can't edit anyone's post
+    user = User.objects.get(id=request.user.id)
+    if user == post.author:
+
+        # Update post content into database
+        if request.method == "PUT":
+            data = json.loads(request.body)
+
+            if data.get("content") is not None:
+                post.content = data["content"]
+
+            post.save()
+
+            return HttpResponse(status=204)
+
+        # Email must be via PUT
+        else:
+            return JsonResponse({
+                "error": "PUT request required."
+            }, status=400)
+    else:
+        return HttpResponseRedirect(reverse("index"))
+
+
 def follow(request, user_id):
     try:
         # Get current user and target user to follow/unfollow
@@ -102,6 +217,10 @@ def like(request, post_id):
     # Remove if already liking, else add the like
     if Like.objects.filter(user=current_user, post=post).exists():
         Like.objects.filter(user=current_user, post=post).delete()
+
+        # Decrease post like counter
+        post.likes -= 1 
+        post.save()
     else:
         add_like = Like(
             user=current_user, 
@@ -109,102 +228,11 @@ def like(request, post_id):
         )
         add_like.save()
 
-    return HttpResponse(status=204)
-
-
-@login_required(redirect_field_name=None, login_url='/login')
-def following(request):
-    current_user = User.objects.get(id=request.user.id)
-    following = Follower.objects.filter(follower=current_user)
-
-    posts = []
-    for follow in following:
-        following_user_posts = Post.objects.filter(author=follow.user)
-        for post in following_user_posts:
-            posts.append(post)
-
-    def get_post_id(post):
-        return post.id
-
-    # Sort posts list by most recent
-    posts.sort(reverse=True, key=get_post_id)
-
-    # Pagination logic
-    paginator = Paginator(posts, 10)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-
-    return render(request, "network/following.html", {
-        "page_obj": page_obj
-    })
-
-
-def profile_view(request, username):
-    try:
-        user = User.objects.get(username=username)
-
-        # Pagination logic
-        post_list = Post.objects.filter(author=user).order_by('-id') 
-        paginator = Paginator(post_list, 10)
-        page_number = request.GET.get('page')
-        page_obj = paginator.get_page(page_number)
-
-        if request.user.is_authenticated:
-            try:
-                current_user = User.objects.get(id=request.user.id)
-                is_following = False
-
-                if Follower.objects.filter(user=user, follower=current_user).exists():
-                    is_following = True
-
-                return render(request, "network/profile.html", {
-                    "page_obj": page_obj,
-                    "followers": len(Follower.objects.filter(user=user)),
-                    "following": len(Follower.objects.filter(follower=user)),
-                    "user_profile": user,
-                    "is_following": is_following
-                })
-            except User.DoesNotExist:
-                return HttpResponseRedirect(reverse("index"))
-
-        else:
-            return render(request, "network/profile.html", {
-                "page_obj": page_obj,
-                "followers": len(Follower.objects.filter(user=user)),
-                "following": len(Follower.objects.filter(follower=user)),
-                "user_profile": user
-            })
-
-    except User.DoesNotExist:
-        return HttpResponseRedirect(reverse("index"))
-
-
-@csrf_exempt
-@login_required(redirect_field_name=None, login_url='/login')
-def edit(request, post_id):
-
-    # Query for requested post
-    try:
-        post = Post.objects.get(pk=post_id)
-    except Post.DoesNotExist:
-        return JsonResponse({"error": "Post not found."}, status=404)
-
-    # Update post content into database
-    if request.method == "PUT":
-        data = json.loads(request.body)
-
-        if data.get("content") is not None:
-            post.content = data["content"]
-
+        # Increase post like counter
+        post.likes += 1 
         post.save()
-
-        return HttpResponse(status=204)
-
-    # Email must be via PUT
-    else:
-        return JsonResponse({
-            "error": "PUT request required."
-        }, status=400)
+        
+    return HttpResponse(status=204)
 
 
 def login_view(request):
