@@ -1,5 +1,5 @@
 <h1 align="center">
-    <img alt="Shih Tzu logo" src="./capstone/static/capstone/assets/recipelib-logo.png" width="150px" />
+    <img alt="RecipeLab logo" src="./capstone/static/capstone/assets/recipelib-logo.png" width="150px" />
 </h1>
 
 <h1 align="center">RecipeLib Web App</h1>
