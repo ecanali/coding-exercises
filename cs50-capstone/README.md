@@ -23,19 +23,20 @@ Table of contents
 
 ## Why this project? <a name="-why-this-project" style="text-decoration:none"></a>
 
-This application uses the concepts of back-end with Django and front-end with HTML, CSS and JavaScript learned in the course and goes further. It explores image upload and storage, interactive visual effects when uploading and displaying images and texts, pagination and search filter in the recipe library.
+This application uses the concepts of back-end with Django and front-end with HTML, CSS and JavaScript learned in the course and goes further.
+This project satisfies the distinctiveness and complexity requirements because it explores image handling with upload and storage of the files into the database, interactive visual effects when uploading and displaying images and texts (excluding the images uploaded and hiding/showing the description text of the recipes by JavaScript), pagination and search filter in the recipe library. This application also includes an admin section of the page (different from the built-in Django's admin page) to manage the recipes.
 
 ---
 
 ## What's in the files? <a name="-whats-in-files" style="text-decoration:none"></a>
-- **views.py**: all the back-end logic to query database and display the recipes accordingly to user's search and functions to manage user's own recipes, creating, editing and deleting contents;
+- **views.py**: all the back-end logic to query database and display the recipes accordingly to user's search and functions to manage user's own recipes, creating, editing and deleting contents. I wrote 10 additional routes/functions in order to achieve the project's goal, they are: index, about, recipes, recipe, filter, myrecipes, myrecipe, create_view, edit_view and delete;
 - **models.py**: my 3 models of User, Recipe and File and their relationship, including logic to save the uploaded files to local storage;
-- **static/styles**: more than 1,000 lines of CSS code for standard and mobile-responsive design;
-- **static/site & admin**: all the front-end logic to dynamic change the page, including visual display of files during the upload;
-- **static/assets/**: the immutable images;
-- **static/images/**: the recipes mutable images;
-- **templates**: all the pages accessed by all users;
-- **templates/admin**: all the pages accessed only by logged in users to manage their recipes.
+- **static/styles.css**: more than 1,000 lines of CSS code for standard and mobile-responsive design;
+- **static/site.js & admin.js**: all the JavaScript code to dynamic change the pages, including code to open the correct recipe details, hide/show informations, show on the nav bar which page the user is, all the logic to switch images in the gallery preview and to handle the user's uploaded image files;
+- **static/assets/**: the immutable images files;
+- **static/images/**: the recipes mutable images files;
+- **templates/**: all the HTML view pages accessed by all users;
+- **templates/admin/**: all the HTML view pages accessed only by logged in users to manage their recipes.
 
 ---
 
