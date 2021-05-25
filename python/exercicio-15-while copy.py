@@ -1,24 +1,24 @@
 # Crie um programa que imprime os números primos entre 0 e 200, imprimindo ao final a soma destes números.
-numero = 0
+numeroAvaliado = 0
 limite = 200
 somaPrimos = 0
 
-while numero <= limite:
+while numeroAvaliado <= limite:
   contador = 2
   isPrimo = True
-  if numero == 0 or numero == 1:
+  if numeroAvaliado == 0 or numeroAvaliado == 1:
     isPrimo = False
   else:
-    while contador < numero:
-      if numero % contador == 0:
+    while contador < numeroAvaliado:
+      if numeroAvaliado % contador == 0:
         isPrimo = False
         break
       contador += 1
 
   if isPrimo:
-    print(numero, "É primo!")
-    somaPrimos += numero
+    print(numeroAvaliado, "É primo!")
+    somaPrimos += numeroAvaliado
 
-  numero += 1
+  numeroAvaliado += 1
 
 print('Soma de todos os primos =', somaPrimos)
