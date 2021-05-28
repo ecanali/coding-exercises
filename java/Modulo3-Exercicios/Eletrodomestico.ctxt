@@ -1,0 +1,25 @@
+#BlueJ class context
+comment0.target=Eletrodomestico
+comment1.params=voltage\ price\ brand\ color\ biV
+comment1.target=Eletrodomestico(int,\ double,\ java.lang.String,\ java.lang.String,\ boolean)
+comment10.params=novoCor
+comment10.target=void\ setCor(java.lang.String)
+comment11.params=novoBiVolt
+comment11.target=void\ setBiVolt(boolean)
+comment2.params=
+comment2.target=int\ getVoltagem()
+comment3.params=
+comment3.target=double\ getPreco()
+comment4.params=
+comment4.target=java.lang.String\ getMarca()
+comment5.params=
+comment5.target=java.lang.String\ getCor()
+comment6.params=
+comment6.target=boolean\ getBiVolt()
+comment7.params=novoVoltagem
+comment7.target=void\ setVoltagem(int)
+comment8.params=novoPreco
+comment8.target=void\ setPreco(double)
+comment9.params=novoMarca
+comment9.target=void\ setMarca(java.lang.String)
+numComments=12
