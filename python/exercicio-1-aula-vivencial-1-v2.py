@@ -20,17 +20,19 @@ while programaAtivo:
   mediaAudiencia = somaAudiencia / quantidadeIndices
 
   if False in listaAnalisada:
-    print('AUDIÊNCIA NEM SEMPRE CRESCENTE. Média de audiência:', round(mediaAudiencia, 1))
+    print('AUDIÊNCIA NEM SEMPRE CRESCENTE. Média de audiência: %.1f' % mediaAudiencia)
   else:
-    print('AUDIÊNCIA SEMPRE CRESCENTE. Média de audiência:', round(mediaAudiencia, 1))
+    print('AUDIÊNCIA SEMPRE CRESCENTE. Média de audiência:: %.1f' % mediaAudiencia)
   
   resposta = input('Deseja continuar? (S/N) ')
   if resposta == 's' or resposta == 'S':
     programaAtivo = True
   elif resposta == 'n' or resposta == 'N':
     programaAtivo = False
+    break
   else:
     programaAtivo = False
     print('Opção inválida.')
+    break
 
 print('Programa finalizado.')

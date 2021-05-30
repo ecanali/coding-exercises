@@ -23,5 +23,6 @@ while programaAtivo:
 
   else:
     programaAtivo = False
+    break
 
 print('Programa finalizado.')
