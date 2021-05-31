@@ -13,6 +13,6 @@ quantItems = len(joioETrigo)
 quantJoios = len(joio)
 quantTrigos = len(trigo)
 
-print('"joioETrigo" tem,', quantItems, 'items')
 print('Joios =', quantJoios, joio)
 print('Trigos =', quantTrigos, trigo)
+print('"joioETrigo" tem,', quantItems, 'items')
