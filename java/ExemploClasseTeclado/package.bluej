@@ -1,11 +1,11 @@
 #BlueJ package file
-dependency1.from=PrincipalProduto
-dependency1.to=Produto
+dependency1.from=ExemploTeclado
+dependency1.to=Teclado
 dependency1.type=UsesDependency
 dependency2.from=PrincipalProduto
-dependency2.to=Teclado
+dependency2.to=Produto
 dependency2.type=UsesDependency
-dependency3.from=ExemploTeclado
+dependency3.from=PrincipalProduto
 dependency3.to=Teclado
 dependency3.type=UsesDependency
 editor.fx.0.height=777
