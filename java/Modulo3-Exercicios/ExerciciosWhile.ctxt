@@ -1,0 +1,11 @@
+#BlueJ class context
+comment0.target=ExerciciosWhile
+comment1.params=inteiro
+comment1.target=ExerciciosWhile(int)
+comment2.params=inteiro
+comment2.target=void\ contador(int)
+comment3.params=inteiro
+comment3.target=void\ imprimePares(int)
+comment4.params=inteiro
+comment4.target=boolean\ verificaPrimo(int)
+numComments=5
