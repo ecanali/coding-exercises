@@ -1,9 +1,4 @@
-public class ExerciciosFor {    
-    
-    public ExerciciosFor() {
-        
-    }
-    
+public class ExerciciosFor {
     public void exercicio1(int quantidadePessoas) {
         for (int pessoa = 0; pessoa < quantidadePessoas; pessoa++)
             System.out.println(Teclado.leString("Digite o nome da " + (pessoa + 1) + "ª pessoa:"));
@@ -36,8 +31,8 @@ public class ExerciciosFor {
         int quantidadeGremio = 0;
         for (int time = 0; time < quantidadeTimes; time++) {
             String resposta = Teclado.leString("Digite o time da " + (time + 1) + "ª pessoa:");
-            if (resposta == "Grêmio" || resposta == "grêmio" || resposta == "Gremio" || resposta == "gremio")
-                quantidadeGremio = quantidadeGremio + 1;
+            if (resposta.equals("gremio") || resposta.equals("grêmio") || resposta.equals("Gremio") || resposta.equals("Grêmio"))
+                quantidadeGremio++;
         }
         System.out.println("A quantidade de torcedores para o Grêmio é: " + quantidadeGremio);
     }
@@ -86,12 +81,13 @@ public class ExerciciosFor {
                         System.out.println(val2);
                 }
             }
-        }
+        } else
+            System.out.println("Erro: nenhum valor pode ser negativo.");
     }
     
     public int exercicio10() {
         int soma = 0;
-        for (int numero = 0; numero < 198; numero++)
+        for (int numero = 0; numero <= 198; numero++)
             soma = soma + numero;
         return soma;
     }
@@ -113,10 +109,10 @@ public class ExerciciosFor {
     }
     
     public double exercicio12() {
-        int quantidadeNumerosInformados = 0;
-        int somaNumerosInformados = 0;
+        double quantidadeNumerosInformados = 0;
+        double somaNumerosInformados = 0;
         for (;;) {
-            int numInformado = Teclado.leInt("Digite um número positivo:");
+            double numInformado = Teclado.leInt("Digite um número positivo (negativo para sair):");
             if (numInformado < 0)
                 break;
             quantidadeNumerosInformados += 1;
@@ -151,23 +147,22 @@ public class ExerciciosFor {
     public void exercicio15(int valorFinal) {
         int somaPrimos = 0;
         for (int numeroAvaliado = 0; numeroAvaliado <= valorFinal; numeroAvaliado++) {
-            if (numeroAvaliado > 1) {
+            boolean isPrimo = true;
+            if (numeroAvaliado == 0 || numeroAvaliado == 1)
+                isPrimo = false;
+            else {
                 for (int contador = 2; contador < numeroAvaliado; contador++) {
-                    if (numeroAvaliado % contador == 0)
+                    if (numeroAvaliado % contador == 0) {
+                        isPrimo = false;
                         break;
-                    else
-                        System.out.println("O número " + contador + " é primo.");
-                        somaPrimos += numeroAvaliado;
+                    }
                 }
-            }   
+            }
+            if (isPrimo) {
+                System.out.println("O número " + numeroAvaliado + " é primo.");
+                somaPrimos += numeroAvaliado;
+            }
         }
         System.out.println("A soma de todos os números primos entre 0 e " + valorFinal + " é: " + somaPrimos);
     }
 }
-
-
-
-
-
-
-
