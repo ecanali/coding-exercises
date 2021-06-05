@@ -1,0 +1,21 @@
+#BlueJ class context
+comment0.target=Tamagotchi
+comment1.params=nome
+comment1.target=Tamagotchi(java.lang.String)
+comment2.params=
+comment2.target=boolean\ getIsVivo()
+comment3.params=
+comment3.target=void\ estadoAtual()
+comment4.params=causa
+comment4.target=void\ morrer(java.lang.String)
+comment5.params=
+comment5.target=void\ dormir()
+comment6.params=
+comment6.target=boolean\ isNutrido()
+comment7.params=
+comment7.target=void\ sentirSono()
+comment8.params=
+comment8.target=void\ sentirFome()
+comment9.params=
+comment9.target=void\ ficarEntediado()
+numComments=10
