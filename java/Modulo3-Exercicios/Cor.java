@@ -1,33 +1,33 @@
 public class Cor {
-    private int r, g, b;
+    private int red, green, blue;
     
     public Cor(int red, int green, int blue) {
-        r = red;
-        g = green;
-        b = blue;
+        this.red = red;
+        this.green = green;
+        this.blue = blue;
     }
     
-    public int getR() {
-        return r;
+    public int getRed() {
+        return red;
     }
     
-    public int getG() {
-        return g;
+    public int getGreen() {
+        return green;
     }
     
-    public int getB() {
-        return b;
+    public int getBlue() {
+        return blue;
     }
     
-    public void setR(int novoR) {
-        r = novoR;
+    public void setRed(int novoR) {
+        red = novoR;
     }
     
-    public void setG(int novoG) {
-        g = novoG;
+    public void setGreen(int novoG) {
+        green = novoG;
     }
     
-    public void setB(int novoB) {
-        b = novoB;
+    public void setBlue(int novoB) {
+        blue = novoB;
     }
 }
