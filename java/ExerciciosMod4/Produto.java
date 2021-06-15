@@ -20,7 +20,7 @@ public class Produto {
     public Produto(String nome, double preco, Data dataValidade) {
         this.nome = nome;
         this.preco = preco;
-        this.dataValidade = new Data(dataValidade.getDia(), dataValidade.getMes(), dataValidade.getAno());
+        this.dataValidade = dataValidade;
     }
     
     public String toString() {
@@ -51,12 +51,27 @@ public class Produto {
         this.dataValidade = dataValidade;
     }
     
-    public boolean verificaProdutoVencido(Data data) {
-        if (data.getAno() >= dataValidade.getAno() 
-            && data.getMes() >= dataValidade.getMes() 
-            && data.getDia() > dataValidade.getDia())
-            return true;
-        else
+    /*public boolean verificaProdutoVencido(Data data) {
+        if (data.getAno() >= dataValidade.getAno())
             return false;
+        
+        if (data.getMes() >= dataValidade.getMes())
+            return false;
+        if (data.getDia() > dataValidade.getDia())
+            return false;
+        else
+            return true;
+    }*/
+    public boolean verificaProdutoVencido(Data dataAtual)
+    {
+        if(dataValidade.getAno() > dataAtual.getAno()){
+            return false;
+        }else if(dataValidade.getMes() > dataAtual.getMes()){
+            return false;
+        }else if(dataValidade.getDia() >= dataAtual.getDia()){
+            return false;
+        }else{
+            return true;
+        }
     }
 }

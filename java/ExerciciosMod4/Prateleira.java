@@ -1,5 +1,5 @@
 public class Prateleira {
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         Data data1 = new Data(15, 06, 2021);
         Data data2 = new Data(14, 06, 2021);
         Data data3 = new Data(16, 06, 2021);
@@ -12,14 +12,14 @@ public class Prateleira {
         
         System.out.println(minhaPrat);
         System.out.println(minhaPrat.produtoMaisCaro());
-    }
+    }*/
     
     private Produto produto1, produto2, produto3;
     
     public Prateleira(Produto produto1, Produto produto2, Produto produto3) {
-        this.produto1 = new Produto(produto1.getNome(), produto1.getPreco(), produto1.getDataValidade());
-        this.produto2 = new Produto(produto2.getNome(), produto2.getPreco(), produto2.getDataValidade());
-        this.produto3 = new Produto(produto3.getNome(), produto3.getPreco(), produto3.getDataValidade());
+        this.produto1 = produto1;
+        this.produto2 = produto2;
+        this.produto3 = produto3;
     }
     
     public Prateleira() {
@@ -58,11 +58,10 @@ public class Prateleira {
     
     public Produto produtoMaisCaro() {
         Produto produtoMaisCaro = produto1;
-        if (produto1.getPreco() > produto2.getPreco() && produto1.getPreco() > produto3.getPreco())
-            return produto1;
-        else if (produto2.getPreco() > produto1.getPreco() && produto2.getPreco() > produto3.getPreco())
-            return produto2;
-        else
-            return produto3;
+        if (produto2 != null && produto2.getPreco() > produtoMaisCaro.getPreco())
+            produtoMaisCaro = produto2;
+        if (produto3 != null && produto3.getPreco() > produtoMaisCaro.getPreco())
+            produtoMaisCaro = produto3;
+        return produtoMaisCaro;
     }
 }

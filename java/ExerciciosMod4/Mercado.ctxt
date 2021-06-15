@@ -1,0 +1,11 @@
+#BlueJ class context
+comment0.target=Mercado
+comment1.params=prateleira1\ prateleira2
+comment1.target=Mercado(Prateleira,\ Prateleira)
+comment2.params=
+comment2.target=Prateleira\ getPrateleira1()
+comment3.params=
+comment3.target=Prateleira\ getPrateleira2()
+comment4.params=
+comment4.target=double\ mediaValorProdutos()
+numComments=5
