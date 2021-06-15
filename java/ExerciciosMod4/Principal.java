@@ -25,16 +25,6 @@ public class Principal {
         
         Mercado mercado1 = new Mercado(prateleira1, prateleira2);
         
-        System.out.println("Os produtos vencidos são:");
-        System.out.println(mercado1.getPrateleira1().getProduto1().getDataValidade());
-        System.out.println(mercado1.getPrateleira1().getProduto1().verificaProdutoVencido(new Data(10, 10, 2014)));
-        System.out.println(mercado1.getPrateleira1().getProduto2().getDataValidade());
-        System.out.println(mercado1.getPrateleira1().getProduto2().verificaProdutoVencido(new Data(10, 10, 2014)));
-        System.out.println(mercado1.getPrateleira1().getProduto3().getDataValidade());
-        System.out.println(mercado1.getPrateleira1().getProduto3().verificaProdutoVencido(new Data(10, 10, 2014)));
-        System.out.println(mercado1.getPrateleira2().getProduto1().getDataValidade());
-        System.out.println(mercado1.getPrateleira2().getProduto1().verificaProdutoVencido(new Data(10, 10, 2014)));
-        
         Produto produtoMaisCaroPrateleira1 = mercado1.getPrateleira1().produtoMaisCaro();
         Produto produtoMaisCaroPrateleira2 = mercado1.getPrateleira2().produtoMaisCaro();
         
