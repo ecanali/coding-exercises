@@ -1,0 +1,13 @@
+#BlueJ class context
+comment0.target=Programador
+comment1.params=
+comment1.target=Programador()
+comment2.params=nome\ idade\ linguagemPreferida
+comment2.target=Programador(java.lang.String,\ int,\ java.lang.String)
+comment3.params=
+comment3.target=java.lang.String\ getLinguagemPreferida()
+comment4.params=linguagemPreferida
+comment4.target=void\ setLinguagemPreferida(java.lang.String)
+comment5.params=
+comment5.target=void\ imprimeDados()
+numComments=6

@@ -1,0 +1,9 @@
+#BlueJ class context
+comment0.target=Banana
+comment1.params=nome\ preco\ tipo
+comment1.target=Banana(java.lang.String,\ double,\ java.lang.String)
+comment2.params=
+comment2.target=java.lang.String\ getTipo()
+comment3.params=tipo
+comment3.target=void\ setTipo(java.lang.String)
+numComments=4
