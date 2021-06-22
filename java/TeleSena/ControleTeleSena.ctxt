@@ -1,0 +1,17 @@
+#BlueJ class context
+comment0.target=ControleTeleSena
+comment1.params=
+comment1.target=ControleTeleSena()
+comment2.params=
+comment2.target=Pessoa[]\ getPessoas()
+comment3.params=pessoas
+comment3.target=void\ setPessoas(Pessoa[])
+comment4.params=
+comment4.target=void\ cadastraPessoas()
+comment5.params=
+comment5.target=void\ criaTeleSenasVenda()
+comment6.params=
+comment6.target=void\ vendeTeleSenas()
+comment7.params=args
+comment7.target=void\ main(java.lang.String[])
+numComments=8

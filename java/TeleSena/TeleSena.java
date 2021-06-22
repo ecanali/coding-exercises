@@ -3,7 +3,7 @@ public class TeleSena {
     private final int MAX_NUMEROS_CONJUNTO = 25;
     public int[] conjunto1, conjunto2;
     
-    // Retorna Array com números aleatórios e não repetidos
+    // Retorna Array com números aleatórios e não repetidos do conjunto
     public int[] sorteiaNumerosConjunto() {
         int[] conjunto = new int[MAX_NUMEROS_CONJUNTO];
         int numeroSorteado;
@@ -24,41 +24,50 @@ public class TeleSena {
         return conjunto;
     }
     
-    
-    public TeleSena() {
-        // Cada um dos conjuntos de números de cada Tele Sena possui 
-        // 25 números aleatórios entre 1 e 60, sem repetições 
-        // (ou seja, no mesmo conjunto de 25 números não pode haver números 
-        // repetidos)
-        
+    public TeleSena() {        
         conjunto1 = sorteiaNumerosConjunto();
         conjunto2 = sorteiaNumerosConjunto();
-        
-        /*conjunto1 = new int[25];
-        conjunto2 = new int[25];
-        
-        
-        
-        int numeroSorteado;
-        
-
+    }
+    
+    public int[] getConjunto1() {
+        return conjunto1;
+    }
+    
+    public int[] getConjunto2() {
+        return conjunto2;
+    }
+    
+    public void setConjunto1(int[] conjunto1) {
+        this.conjunto1 = conjunto1;
+    }
+    
+    public void setConjunto2(int[] conjunto2) {
+        this.conjunto2 = conjunto2;
+    }
+    
+    public String toString() {
+        String textoConjunto1 = "";
         for (int i = 0; i < conjunto1.length; i++) {
-            conjunto1[i] = -1;
+            textoConjunto1 += conjunto1[i] + ", ";
         }
         
-        for (int i = 0; i < conjunto1.length; i++) {
-            numeroSorteado = (int)(Math.random() * 60 + 1);
-            if (conjunto1[i] == -1 && conjunto1[i] != numeroSorteado)
-                conjunto1[i] = numeroSorteado;
-        }*/
-        
-        
-        
+        String textoConjunto2 = "";
+        for (int i = 0; i < conjunto2.length; i++) {
+            textoConjunto2 += conjunto2[i] + ", ";
+        }
+                
+        return "[Valor de venda] " + VALOR_VENDA +
+            "\n[Máximo de números no conjunto] " + MAX_NUMEROS_CONJUNTO + 
+            "\n[Conjunto 1] " + textoConjunto1 +
+            "\n[Conjunto 2] " + textoConjunto2;
     }
     
     
-    
     public static void main(String[] args) {
+        
+        TeleSena novaTS1 = new TeleSena();
+        
+        System.out.println(novaTS1);
         
         //int[]conjunto2 = new int[25];
         
@@ -75,7 +84,7 @@ public class TeleSena {
                 for (int j = 0; j < conjunto1.length; i++) {
                     
                 }
-                conjunto1[i] = numeroSorteado;*/
+                conjunto1[i] = numeroSorteado;
             
             //
             
@@ -89,5 +98,6 @@ public class TeleSena {
         for (int i = 0; i < novaTS1.conjunto2.length; i++)
             System.out.print(novaTS1.conjunto2[i] + ", ");
 
+    }*/
     }
 }
