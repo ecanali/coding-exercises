@@ -45,12 +45,12 @@ public class Pessoa {
     }
     
     public static void main(String[] args) {
-        TeleSena ts = new TeleSena();
-        TeleSena ts2 = new TeleSena();
+        //TeleSena ts = new TeleSena();
+        //TeleSena ts2 = new TeleSena();
         
-        Pessoa maicon = new Pessoa("Maicon", 1);
-        TeleSena[] arrayTS = {ts, ts2};
-        maicon.setTeleSenasCompradas(arrayTS);
+        Pessoa maicon = new Pessoa("Maicon", 2);
+        // TeleSena[] arrayTS = {ts, ts2};
+        // maicon.setTeleSenasCompradas(arrayTS);
         
         System.out.println(maicon);
     }

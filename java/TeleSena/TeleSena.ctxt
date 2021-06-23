@@ -2,6 +2,7 @@
 comment0.target=TeleSena
 comment1.params=
 comment1.target=int[]\ sorteiaNumerosConjunto()
+comment1.text=public\ int[]\ sorteiaNumerosConjunto()\ {\n\ \ \ \ \ \ \ \ int[]\ conjunto\ \=\ new\ int[MAX_NUMEROS_CONJUNTO];\n\ \ \ \ \ \ \ \ int\ numeroSorteado;\n\ \ \ \ \ \ \ \ for\ (int\ i\ \=\ 0;\ i\ <\ conjunto.length;\ i++)\ {\n\ \ \ \ \ \ \ \ \ \ \ \ numeroSorteado\ \=\ (int)(Math.random()\ *\ 60\ +\ 1);\n\ \ \ \ \ \ \ \ \ \ \ \ \n\ \ \ \ \ \ \ \ \ \ \ \ if\ (conjunto[i]\ \=\=\ numeroSorteado)\ {\n\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ break;\n\ \ \ \ \ \ \ \ \ \ \ \ }\ else\ {\n\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ for\ (int\ j\ \=\ 0;\ j\ <\ conjunto.length;\ j++)\ {\n\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ if\ (conjunto[j]\ \=\=\ 0)\ {\n\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ conjunto[i]\ \=\ numeroSorteado;\n\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ break;\n\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }\ \ \ \ \n\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }\n\ \ \ \ \ \ \ \ \ \ \ \ }\n\ \ \ \ \ \ \ \ }\n\ \ \ \ \ \ \ \ return\ conjunto;\n}
 comment2.params=
 comment2.target=TeleSena()
 comment3.params=

@@ -4,7 +4,7 @@ public class TeleSena {
     public int[] conjunto1, conjunto2;
     
     // Retorna Array com números aleatórios e não repetidos do conjunto
-    public int[] sorteiaNumerosConjunto() {
+    /*public int[] sorteiaNumerosConjunto() {
         int[] conjunto = new int[MAX_NUMEROS_CONJUNTO];
         int numeroSorteado;
         for (int i = 0; i < conjunto.length; i++) {
@@ -18,6 +18,30 @@ public class TeleSena {
                         conjunto[i] = numeroSorteado;
                         break;
                     }    
+                }
+            }
+        }
+        return conjunto;
+    }*/
+    
+    public int[] sorteiaNumerosConjunto() {
+        int[] conjunto = new int[MAX_NUMEROS_CONJUNTO];
+        int numeroSorteado;
+        boolean encontrou, jaTem;
+        for (int i = 0; i < conjunto.length; i++) {
+            encontrou = false;
+            while (!encontrou) {
+                jaTem = false;
+                numeroSorteado = (int)(Math.random() * 60 + 1);
+                for (int j = 0; j < conjunto.length; j++) {
+                    if (numeroSorteado == conjunto[j]) {
+                        jaTem = true;
+                        break;
+                    }
+                }
+                if (!jaTem) {
+                   encontrou = true;
+                   conjunto[i] = numeroSorteado;
                 }
             }
         }
