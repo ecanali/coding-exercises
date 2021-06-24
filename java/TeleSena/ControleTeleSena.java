@@ -1,7 +1,7 @@
 public class ControleTeleSena {
-    private final int MAX_PESSOAS = 10; //20 original
-    private final int MAX_TELE_SENA_VENDA = 100; //300 original
-    private final int MAX_TELE_SENA_PESSOA = 5; //15 original
+    private final int MAX_PESSOAS = 20; //20 original
+    private final int MAX_TELE_SENA_VENDA = 300; //300 original
+    private final int MAX_TELE_SENA_PESSOA = 15; //15 original
     private Pessoa[] pessoas;
     private TeleSena[] teleSenas;
     
@@ -82,10 +82,13 @@ public class ControleTeleSena {
         System.out.println("/////////////   " + teleSenasVendidas + " Tele Senas Vendidas! ////////");
     }
     
-    public void sorteia25NumerosIniciais() {
-        int[] numerosInicias = new int[25];
+    public int[] sorteiaNumerosIniciais() {
+        int[] numerosInicias = new int[25]; //25 original
         int numeroSorteado;
         boolean encontrou, jaTem;
+        
+        //System.out.println("Os números inicias sorteados são:");
+        
         for (int i = 0; i < numerosInicias.length; i++) {
             encontrou = false;
             while (!encontrou) {
@@ -105,8 +108,11 @@ public class ControleTeleSena {
             //System.out.print(numerosInicias[i] + ", ");
         }
         
+        return numerosInicias;
+        
+        
         //conferir se alguma Tele Sena comprada tem todos os números sorteados
-        int quantidadeNumerosSorteados = 25;
+        /*int quantidadeNumerosSorteados = 25;
         boolean sorteioComGanhador = false;
         boolean conjuntoGanhador = false;
         int quantidadeGanhadores = 0;
@@ -141,6 +147,128 @@ public class ControleTeleSena {
         
         
         System.out.println("Quantidade ganhadores: " + quantidadeGanhadores + "\nNomes dos ganhadores: " + nomesGanhadores);
+        */
+    }
+
+
+    public boolean verificaGanhadores(int[] numerosSorteados) {
+        boolean sorteioComGanhador = false;
+        //boolean conjuntoGanhador = false;
+        int quantidadeGanhadores = 0;
+        String nomesGanhadores = "";
+        
+        for (int j = 0; j < pessoas.length; j++) {
+            for (int k = 0; k < pessoas[j].getTeleSenasCompradas().length; k++) {
+                // if (pessoas[j].getTeleSenasCompradas()[k] == null) {}
+                int acertos1 = 0;
+                for (int l = 0; l < pessoas[j].getTeleSenasCompradas()[k].getConjunto1().length; l++) {
+                    
+                    for (int m = 0; m < numerosSorteados.length; m++) {
+                        if (pessoas[j].getTeleSenasCompradas()[k].getConjunto1()[l] == numerosSorteados[m]) {
+                            acertos1 += 1;
+                            System.out.println("Conj 1 da TS do " + pessoas[j].getNome() + " acertou o número: " + numerosSorteados[m]);
+                        }
+                    }
+                }
+                int acertos2 = 0;
+                for (int l = 0; l < pessoas[j].getTeleSenasCompradas()[k].getConjunto2().length; l++) {
+                    
+                    for (int m = 0; m < numerosSorteados.length; m++) {
+                        if (pessoas[j].getTeleSenasCompradas()[k].getConjunto2()[l] == numerosSorteados[m]) {
+                            acertos2 += 1;
+                            System.out.println("Conj 2 da TS do " + pessoas[j].getNome() + " acertou o número: " + numerosSorteados[m]);
+                        }
+                    }
+                    
+                }
+                if (acertos1 == numerosSorteados.length || acertos2 == numerosSorteados.length) {
+                    sorteioComGanhador = true;
+                    quantidadeGanhadores += 1;
+                    nomesGanhadores += pessoas[j].getNome() + ", ";
+                }
+            }
+        }
+        System.out.println("Sorteio com ganhador? " + sorteioComGanhador + " | Quantidade de ganhadores: " + quantidadeGanhadores + " | Nome dos ganhadores: " + nomesGanhadores);
+        return sorteioComGanhador;
+    }
+    
+    public int[] sorteiaNumeroExtra(int[] sorteioAtual) {
+        // Cria array com +1 espaço para o número extra
+        int[] numerosIniciasMaisExtra = new int[(sorteioAtual.length + 1)]; //25 original + 1
+        
+        // Copia array de numeros sorteados iniciais para novo array com +1 espaço
+        for (int i = 0; i < sorteioAtual.length; i++) {
+                numerosIniciasMaisExtra[i] = sorteioAtual[i];
+        }
+        
+        int numeroSorteado;
+        boolean encontrou, jaTem;
+        
+        //System.out.println("Os números inicias sorteados são:");
+        
+        for (int i = 0; i < numerosIniciasMaisExtra.length; i++) {
+            encontrou = false;
+            while (!encontrou) {
+                jaTem = false;
+                numeroSorteado = (int)(Math.random() * 60 + 1);
+                for (int j = 0; j < numerosIniciasMaisExtra.length; j++) {
+                    if (numeroSorteado == numerosIniciasMaisExtra[j]) {
+                        jaTem = true;
+                        break;
+                    } else if (numerosIniciasMaisExtra[j] == 0) {
+                        numerosIniciasMaisExtra[j] = numeroSorteado;
+                    }
+                }
+                if (!jaTem) {
+                   encontrou = true;
+                   // numerosIniciasMaisExtra[i] = numeroSorteado;
+                }
+            }
+            //System.out.print(numerosInicias[i] + ", ");
+        }
+        
+        //return numerosIniciasMaisExtra;
+        
+        /*int numeroSorteado;
+        boolean encontrou, jaTem;
+        
+        //System.out.println("Os números inicias sorteados são:");
+        encontrou = false;
+        while (!encontrou) {
+            numeroSorteado = (int)(Math.random() * 60 + 1);
+            for (int j = 0; j < numerosIniciasMaisExtra.length; j++) {
+                if (numeroSorteado == numerosIniciasMaisExtra[j]) {
+                    jaTem = true;
+                    break;
+                } else if (numerosIniciasMaisExtra[j] == 0)
+                    numerosIniciasMaisExtra[j] = numeroSorteado;
+                    encontrou = true;
+                    break;
+            }
+        }
+        
+        /*for (int i = 0; i < numerosIniciasMaisExtra.length; i++) {
+            encontrou = false;
+            while (!encontrou) {
+                jaTem = false;
+                numeroSorteado = (int)(Math.random() * 60 + 1);
+                for (int j = 0; j < numerosIniciasMaisExtra.length; j++) {
+                    if (numeroSorteado == numerosIniciasMaisExtra[j]) {
+                        jaTem = true;
+                        break;
+                    } else if (numerosIniciasMaisExtra[j] == 0)
+                        numerosIniciasMaisExtra[j] = numeroSorteado;
+                }
+                if (!jaTem) {
+                   encontrou = true;
+                   numerosIniciasMaisExtra[i] = numeroSorteado;
+                }
+            }
+            //System.out.print(numerosInicias[i] + ", ");
+        }*/
+        
+        return numerosIniciasMaisExtra;
+        
     }
     
     public void realizaSorteio() {
@@ -152,6 +280,55 @@ public class ControleTeleSena {
         //caso não, sortear +1 número aleatório e não repetido e conferir de novo
         //fazer isso até (while) ter mínimo 1 ganhador
         // int[] sorteioInicial = 
+        
+        int quantidadeSorteios = 1;
+        
+        int[] numerosSorteados = sorteiaNumerosIniciais();
+        
+        System.out.println("Os números inicias sorteados são:");
+        for (int i = 0; i < numerosSorteados.length; i++)
+            System.out.print(numerosSorteados[i] + ", ");
+        
+        /*   
+        verificaGanhadores(numerosSorteados);
+        System.out.println("O sorteio de número " + quantidadeSorteios + " com número extra ficou:");
+            for (int i = 0; i < numerosSorteados.length; i++)
+                System.out.print(numerosSorteados[i] + ", ");
+        
+        numerosSorteados = sorteiaNumeroExtra(numerosSorteados);
+        quantidadeSorteios += 1;
+        
+        verificaGanhadores(numerosSorteados);
+        System.out.println("O sorteio de número " + quantidadeSorteios + " com número extra ficou:");
+            for (int i = 0; i < numerosSorteados.length; i++)
+                System.out.print(numerosSorteados[i] + ", ");
+        */
+       
+        boolean temosGanhadores = false;
+        
+        while(temosGanhadores == false) {
+            boolean temGanhadores = verificaGanhadores(numerosSorteados);
+            
+            if (temGanhadores) {
+                temosGanhadores = true;
+                break;
+            } else {
+            
+                numerosSorteados = sorteiaNumeroExtra(numerosSorteados);
+                quantidadeSorteios += 1;
+            }
+            
+            
+            System.out.println("O sorteio de número " + quantidadeSorteios + " com número extra ficou:");
+            for (int i = 0; i < numerosSorteados.length; i++)
+                System.out.print(numerosSorteados[i] + ", ");
+                
+            
+        }
+        
+        
+        // int[] sorteioExtra = sorteiaNumeroExtra(numerosSorteados);
+        
         
     }
     
@@ -166,7 +343,7 @@ public class ControleTeleSena {
         cts.criaTeleSenas();
         cts.vendeTeleSenas();
         
-        cts.sorteia25NumerosIniciais();
+        cts.realizaSorteio();
         
         /*for (int i = 0; i < cts.getTeleSenas().length; i++) {
             System.out.print("Tele Sena nº" + (i + 1) + cts.getTeleSenas()[i] + ", ");
