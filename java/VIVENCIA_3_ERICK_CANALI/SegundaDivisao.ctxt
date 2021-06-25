@@ -1,0 +1,11 @@
+#BlueJ class context
+comment0.target=SegundaDivisao
+comment1.params=nome\ quantidadeMaximaSocios\ quantAnosSeguidos2Divisao
+comment1.target=SegundaDivisao(java.lang.String,\ int,\ int)
+comment2.params=
+comment2.target=int\ getQuantAnosSeguidos2Divisao()
+comment3.params=quantAnosSeguidos2Divisao
+comment3.target=void\ setQuantAnosSeguidos2Divisao(int)
+comment4.params=
+comment4.target=java.lang.String\ toString()
+numComments=5

@@ -1,0 +1,11 @@
+#BlueJ class context
+comment0.target=PrimeiraDivisao
+comment1.params=nome\ quantidadeMaximaSocios\ posicaoRankingNacional
+comment1.target=PrimeiraDivisao(java.lang.String,\ int,\ int)
+comment2.params=
+comment2.target=int\ getPosicaoRankingNacional()
+comment3.params=posicaoRankingNacional
+comment3.target=void\ setPosicaoRankingNacional(int)
+comment4.params=
+comment4.target=java.lang.String\ toString()
+numComments=5

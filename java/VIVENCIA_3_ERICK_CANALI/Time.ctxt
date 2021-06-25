@@ -1,0 +1,21 @@
+#BlueJ class context
+comment0.target=Time
+comment1.params=nome\ quantidadeMaximaSocios
+comment1.target=Time(java.lang.String,\ int)
+comment2.params=
+comment2.target=java.lang.String\ getNome()
+comment3.params=nome
+comment3.target=void\ setNome(java.lang.String)
+comment4.params=
+comment4.target=Socio[]\ getSocios()
+comment5.params=socios
+comment5.target=void\ setSocios(Socio[])
+comment6.params=
+comment6.target=java.lang.String\ toString()
+comment7.params=novoSocio
+comment7.target=boolean\ insereSocio(Socio)
+comment8.params=
+comment8.target=java.lang.String\ socioMaisVelho()
+comment9.params=
+comment9.target=void\ imprimeSocios()
+numComments=10
