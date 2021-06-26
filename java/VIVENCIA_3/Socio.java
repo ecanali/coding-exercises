@@ -26,12 +26,4 @@ public class Socio {
     public String toString() {
         return "[Nome] " + nome + "\n[Idade] " + idade;
     }
-    
-    /*
-    public static void main(String[] args) {
-        Socio socio1 = new Socio("Roberto", 42);
-        
-        System.out.println(socio1);
-    }
-    */
 }

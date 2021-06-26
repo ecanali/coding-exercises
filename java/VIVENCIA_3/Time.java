@@ -43,8 +43,10 @@ public class Time {
     public String socioMaisVelho() {
         Socio socioMaisVelho = socios[0];
         for (int i = 0; i < socios.length; i++) {
-            if (socios[i].getIdade() > socioMaisVelho.getIdade())
-                socioMaisVelho = socios[i];
+            if (socios[i] != null) {
+                if (socios[i].getIdade() > socioMaisVelho.getIdade())
+                    socioMaisVelho = socios[i];
+            }
         }
         return socioMaisVelho.getNome();
     }
@@ -53,24 +55,4 @@ public class Time {
         for (int i = 0; i < socios.length; i++)
             System.out.println(socios[i]);
     }
-    
-    /*
-    public static void main(String[] args) {
-        Socio socio1 = new Socio("Roberto", 27);
-        Socio socio2 = new Socio("Betina", 35);
-
-        Socio[] socios1 = {socio1, null};
-        Time time1 = new Time("Inter", 2);
-        
-        System.out.println(time1);
-        time1.setSocios(socios1);
-        System.out.println(time1);
-        System.out.println(time1.insereSocio(socio2));
-        System.out.println(time1);
-        System.out.println(time1.insereSocio(socio1));
-        System.out.println(time1);
-        System.out.println("O sócio mais velho é: " + time1.socioMaisVelho());
-        time1.imprimeSocios();
-    }
-    */
 }
