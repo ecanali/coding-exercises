@@ -41,14 +41,22 @@ public class Time {
     }
     
     public String socioMaisVelho() {
-        Socio socioMaisVelho = socios[0];
+        int posSocioMaisVelho = -1;
         for (int i = 0; i < socios.length; i++) {
             if (socios[i] != null) {
-                if (socios[i].getIdade() > socioMaisVelho.getIdade())
-                    socioMaisVelho = socios[i];
+                posSocioMaisVelho = i;
             }
         }
-        return socioMaisVelho.getNome();
+        
+        if (posSocioMaisVelho == -1) return null; //array sem sócios
+        
+        for (int i = 0; i < socios.length; i++) {
+            if (socios[i] != null) {
+                if (socios[i].getIdade() > socios[posSocioMaisVelho].getIdade())
+                    posSocioMaisVelho = i;
+            }
+        }
+        return socios[posSocioMaisVelho].getNome();
     }
     
     public void imprimeSocios() {

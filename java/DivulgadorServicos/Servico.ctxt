@@ -1,0 +1,17 @@
+#BlueJ class context
+comment0.target=Servico
+comment1.params=
+comment1.target=Servico()
+comment2.params=descricao\ preco
+comment2.target=Servico(java.lang.String,\ double)
+comment3.params=
+comment3.target=java.lang.String\ getDescricao()
+comment4.params=descricao
+comment4.target=void\ setDescricao(java.lang.String)
+comment5.params=
+comment5.target=double\ getPreco()
+comment6.params=preco
+comment6.target=void\ setPreco(double)
+comment7.params=
+comment7.target=java.lang.String\ toString()
+numComments=8

@@ -1,0 +1,13 @@
+#BlueJ class context
+comment0.target=MEI
+comment1.params=
+comment1.target=MEI()
+comment2.params=nome\ usuario\ senha\ endereco\ servicos\ cpf
+comment2.target=MEI(java.lang.String,\ java.lang.String,\ java.lang.String,\ Endereco,\ Servico[],\ java.lang.String)
+comment3.params=
+comment3.target=java.lang.String\ getCpf()
+comment4.params=cpf
+comment4.target=void\ setCpf(java.lang.String)
+comment5.params=
+comment5.target=java.lang.String\ toString()
+numComments=6

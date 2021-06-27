@@ -1,0 +1,15 @@
+#BlueJ class context
+comment0.target=LTDA
+comment1.params=
+comment1.target=LTDA()
+comment2.params=estado
+comment2.target=double\ calculaImposto(java.lang.String)
+comment3.params=nome\ usuario\ senha\ endereco\ servicos
+comment3.target=LTDA(java.lang.String,\ java.lang.String,\ java.lang.String,\ Endereco,\ Servico[])
+comment4.params=
+comment4.target=double\ getImposto()
+comment5.params=imposto
+comment5.target=void\ setImposto(double)
+comment6.params=
+comment6.target=java.lang.String\ toString()
+numComments=7
