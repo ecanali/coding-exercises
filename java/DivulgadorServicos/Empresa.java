@@ -19,6 +19,14 @@ public class Empresa {
         this.servicos = servicos;
     }
     
+    public Empresa(String nome, String usuario, String senha, Endereco endereco) {
+        this.nome = nome;
+        this.usuario = usuario;
+        this.senha = senha;
+        this.endereco = endereco;
+        this.servicos = null;
+    }
+    
     public String getNome() {
         return nome;
     }

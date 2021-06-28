@@ -51,11 +51,13 @@ public class Cliente {
     public String toString() {
         String texto = "Cliente: " + nome + "\n\tUsuário: " + usuario + "\n\tInteressado nas empresas:\n";
         if (interesseEmpresas != null)
-            for (int i = 0; i < interesseEmpresas.length; i++) {
+            for (int i = 0; i < interesseEmpresas.length; i++)
                 if (interesseEmpresas[i] != null)
                     texto += "\t\t" + interesseEmpresas[i].getNome() + "\n";
-                else break;
-            }
+                else {
+                    texto += "\t\tNão informado";
+                    break;
+                }
         else if (interesseEmpresas == null)
             texto += "\t\tNão informado";
         return texto;

@@ -1,0 +1,23 @@
+#BlueJ class context
+comment0.target=Controle
+comment1.params=
+comment1.target=Controle()
+comment10.params=
+comment10.target=boolean\ cadastraEmpresaTeclado()
+comment2.params=
+comment2.target=Empresa[]\ getEmpresas()
+comment3.params=empresas
+comment3.target=void\ setEmpresas(Empresa[])
+comment4.params=
+comment4.target=Cliente[]\ getClientes()
+comment5.params=clientes
+comment5.target=void\ setClientes(Cliente[])
+comment6.params=cliente
+comment6.target=boolean\ cadastraCliente(Cliente)
+comment7.params=
+comment7.target=boolean\ cadastraClienteTeclado()
+comment8.params=
+comment8.target=boolean\ loginCliente()
+comment9.params=empresa
+comment9.target=boolean\ cadastraEmpresa(Empresa)
+numComments=11

@@ -20,6 +20,11 @@ public class LTDA extends Empresa {
         this.imposto = calculaImposto(super.getEndereco().getEstado());
     }
     
+    public LTDA(String nome, String usuario, String senha, Endereco endereco) {
+        super(nome, usuario, senha, endereco);
+        this.imposto = calculaImposto(super.getEndereco().getEstado());
+    }
+    
     public double getImposto() {
         return imposto;
     }

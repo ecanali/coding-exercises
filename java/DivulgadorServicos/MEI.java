@@ -11,6 +11,11 @@ public class MEI extends Empresa {
         this.cpf = cpf;
     }
     
+    public MEI(String nome, String usuario, String senha, Endereco endereco, String cpf) {
+        super(nome, usuario, senha, endereco);
+        this.cpf = cpf;
+    }
+    
     public String getCpf() {
         return cpf;
     }
