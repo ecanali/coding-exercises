@@ -29,7 +29,7 @@ public class Servico {
     }
     
     public String toString() {
-        return descricao + " | Preço: " + preco;
+        return descricao + " | Preço: R$" + String.format("%.2f", preco);
     }
     
     /*
