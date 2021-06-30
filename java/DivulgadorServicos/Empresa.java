@@ -79,4 +79,24 @@ public class Empresa {
             texto += "\t\tNão informado\n";
         return texto;
     }
+    
+    public boolean incluiServico(Servico servico) {
+        Servico[] novoServicos;
+        if (servicos == null) {
+            novoServicos = new Servico[1];
+            novoServicos[0] = servico;
+            servicos = novoServicos;
+            return true;
+        }
+        
+        novoServicos = new Servico[servicos.length + 1];
+        for (int i = 0; i < servicos.length; i++) {
+            novoServicos[i] = servicos[i];
+        }
+        
+        novoServicos[novoServicos.length - 1] = servico;
+        servicos = novoServicos;
+        
+        return true;
+    }
 }
