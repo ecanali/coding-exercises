@@ -62,23 +62,4 @@ public class Cliente {
             texto += "\t\tNão informado";
         return texto;
     }
-    
-    /*
-    public static void main(String[] args) {
-        Servico s1 = new Servico();
-        Servico s2 = new Servico("Lavagem de carros", 45.90);
-        Servico[] servicos1 = {s1, s2};
-        Endereco end = new Endereco("Av. Carlos Gomes", "1.672", "Porto Alegre", "RS");
-        Empresa emp1 = new Empresa("WeWork", "admin", "admin", end, servicos1);
-        Empresa[] listaEmp = {emp1, emp1};
-        
-        System.out.println();
-        System.out.println(new Cliente());
-        System.out.println();
-        Cliente cli1 = new Cliente("Ricardo", "admin", "admin");
-        System.out.println(cli1);
-        cli1.setInteresseEmpresas(listaEmp);
-        System.out.println(cli1);
-    }
-    */
 }

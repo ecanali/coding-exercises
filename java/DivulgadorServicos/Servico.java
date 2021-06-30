@@ -31,11 +31,4 @@ public class Servico {
     public String toString() {
         return descricao + " | Preço: R$" + String.format("%.2f", preco);
     }
-    
-    /*
-    public static void main(String[] args) {
-        System.out.println(new Servico());
-        System.out.println(new Servico("Lavagem de carros", 45.90));
-    }
-    */
 }

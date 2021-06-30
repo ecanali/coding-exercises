@@ -50,11 +50,4 @@ public class Endereco {
     public String toString() {
         return rua + ", " + numero + ", " + cidade + ", " + estado;
     }
-    
-    /*
-    public static void main(String[] args) {
-        System.out.println(new Endereco());
-        System.out.println(new Endereco("Av. Carlos Gomes", "1.672", "Porto Alegre", "RS"));
-    }
-    */
 }
