@@ -53,66 +53,6 @@ public class Controle {
                 t.leString("Digite a senha do Cliente:")));     
     }
     
-    /*public boolean loginCliente() {
-        String usuarioInformado, senhaInformada;
-        boolean encontrouUsuario = false;
-        int tentativasUsuario = 0;
-        while (!encontrouUsuario) {
-            if (tentativasUsuario >= 3) {
-                System.out.println("Usuário não encontrado, 3 tentativas acabaram");
-                return false;
-            } else {
-                usuarioInformado = t.leString("Digite o usuário do Cliente:");
-                int quantDiferentes = 0;
-                int quantNotNull = 0;
-                for (int i = 0; i < clientes.length; i++)
-                    if (clientes[i] != null) {
-                        quantNotNull++;
-                        if (clientes[i].getUsuario().equals(usuarioInformado)) {
-                            encontrouUsuario = true;
-                            clienteLogado = clientes[i];
-                            break;
-                        } else
-                            quantDiferentes++;
-                    }
-                if (quantDiferentes == quantNotNull) {
-                    tentativasUsuario++;
-                    System.out.println("Usuário não encontrado, tente novamente");
-                }
-            }
-        }
-        
-        boolean acertouSenha = false;
-        int tentativasSenha = 0;
-        while (!acertouSenha) {
-            if (tentativasSenha >= 3) {
-                System.out.println("Senha incorreta, 3 tentativas acabaram");
-                return false;
-            } else {
-                senhaInformada = t.leString("Digite a senha do Cliente:");
-                int quantDiferentes = 0;
-                int quantNotNull = 0;
-                for (int i = 0; i < clientes.length; i++)
-                    if (clientes[i] != null) {
-                        quantNotNull++;
-                        if (clientes[i].getSenha().equals(senhaInformada)) {
-                            acertouSenha = true;
-                            clienteLogado = clientes[i];
-                            break;
-                        } else
-                            quantDiferentes++;
-                    }
-                if (quantDiferentes == quantNotNull) {
-                    tentativasSenha++;
-                    System.out.println("Senha incorreta, tente novamente");
-                    
-                }
-            }
-        }
-        //clienteLogado = 
-        return true;
-    }*/
-    
     public boolean loginCliente() {
         String usuarioInformado, senhaInformada;
         
@@ -203,64 +143,6 @@ public class Controle {
         
         return false;
     }
-    
-    /*public boolean loginEmpresa() {
-        String usuarioInformado, senhaInformada;
-        boolean encontrouUsuario = false;
-        int tentativasUsuario = 0;
-        while (!encontrouUsuario) {
-            if (tentativasUsuario >= 3) {
-                System.out.println("Usuário não encontrado, 3 tentativas acabaram");
-                return false;
-            } else {
-                usuarioInformado = t.leString("Digite o usuário da Empresa:");
-                int quantDiferentes = 0;
-                int quantNotNull = 0;
-                for (int i = 0; i < empresas.length; i++)
-                    if (empresas[i] != null) {
-                        quantNotNull++;
-                        if (empresas[i].getUsuario().equals(usuarioInformado)) {
-                            encontrouUsuario = true;
-                            break;
-                        } else
-                            quantDiferentes++;
-                    }
-                if (quantDiferentes == quantNotNull) {
-                    tentativasUsuario++;
-                    System.out.println("Usuário não encontrado, tente novamente");
-                }
-            }
-        }
-        
-        boolean acertouSenha = false;
-        int tentativasSenha = 0;
-        while (!acertouSenha) {
-            if (tentativasSenha >= 3) {
-                System.out.println("Senha incorreta, 3 tentativas acabaram");
-                return false;
-            } else {
-                senhaInformada = t.leString("Digite a senha da Empresa:");
-                int quantDiferentes = 0;
-                int quantNotNull = 0;
-                for (int i = 0; i < empresas.length; i++)
-                    if (empresas[i] != null) {
-                        quantNotNull++;
-                        if (empresas[i].getSenha().equals(senhaInformada)) {
-                            acertouSenha = true;
-                            break;
-                        } else
-                            quantDiferentes++;
-                    }
-                if (quantDiferentes == quantNotNull) {
-                    tentativasSenha++;
-                    System.out.println("Senha incorreta, tente novamente");
-                    
-                }
-            }
-        }
-        
-        return true;
-    }*/
     
     public boolean loginEmpresa() {
         String usuarioInformado, senhaInformada;
@@ -375,8 +257,8 @@ public class Controle {
             
             cadastraCliente(cliente);
             
-            interesseEmpresas = new Empresa[4];
-            for (int n = 0; n < interesseEmpresas.length; n++)
+            interesseEmpresas = new Empresa[10];
+            for (int n = 0; n < 4; n++)
                 interesseEmpresas[n] = empresasCriadas[n];    
             
             cliente.setInteresseEmpresas(interesseEmpresas);
@@ -387,12 +269,59 @@ public class Controle {
     
     public Empresa buscaEmpresaPorNome(String nomeDigitado) {
         for (int i = 0; i < empresas.length; i++) {
-            if (empresas[i].getNome().equalsIgnoreCase(nomeDigitado)) {
-                return empresas[i];
-            }
+            if (empresas[i] != null)
+                if (empresas[i].getNome().equalsIgnoreCase(nomeDigitado)) {
+                    return empresas[i];
+                }
         }
         return null;
     }
+    
+    public Empresa[] buscaEmpresaPorTipo(String tipoDigitado) {
+        Empresa[] empresasTipoEncontradas = new Empresa[empresas.length];
+        for (int i = 0; i < empresas.length; i++) {
+            if (empresas[i] != null) {
+                if (tipoDigitado.equalsIgnoreCase("MEI")) 
+                    if (empresas[i] instanceof MEI)
+                        empresasTipoEncontradas[i] = empresas[i];
+                if (tipoDigitado.equalsIgnoreCase("LTDA"))    
+                    if (empresas[i] instanceof LTDA)
+                        empresasTipoEncontradas[i] = empresas[i];    
+            }
+        }
+        return empresasTipoEncontradas;
+    }
+    
+    public boolean marcarInteresse(Empresa empresa) {
+        if (clienteLogado.getInteresseEmpresas() == null) return false;
+        
+        // Verifica se já está na lista primeiro
+        for (int i = 0; i < clienteLogado.getInteresseEmpresas().length; i++)
+            if (clienteLogado.getInteresseEmpresas()[i] == empresa) {
+                return false;
+            }
+        
+        for (int i = 0; i < clienteLogado.getInteresseEmpresas().length; i++)
+            if (clienteLogado.getInteresseEmpresas()[i] == null) {
+                clienteLogado.getInteresseEmpresas()[i] = empresa;
+                return true;
+            }
+            
+        return false; 
+    }
+    
+    public boolean desmarcarInteresse(Empresa empresa) {
+        if (clienteLogado.getInteresseEmpresas() == null) return false;
+        
+        for (int i = 0; i < clienteLogado.getInteresseEmpresas().length; i++)
+            if (clienteLogado.getInteresseEmpresas()[i] == empresa) {
+                clienteLogado.getInteresseEmpresas()[i] = null;
+                return true;
+            }
+            
+        return false; 
+    }
+    
     
     public void menuCliente() {
         int opcao = 0;
@@ -401,14 +330,84 @@ public class Controle {
         }
         
         if (opcao == 1) {
-            if (cadastraEmpresaTeclado()) {
-                System.out.println("Empresa cadastrada com sucesso!\nRedirecionado ao menu principal...");
-                inicio();
+            String nomeEmpresa = t.leString("Digite o nome da empresa que deseja buscar:");
+            Empresa empresaRetornada = buscaEmpresaPorNome(nomeEmpresa);
+            
+            if (empresaRetornada == null) {
+                System.out.println("Nenhuma empresa encontrada com o nome informado.\nRedirecionado ao Menu de Cliente...");
+                menuCliente();
             } else {
-                System.out.println("ERRO: não foi possível cadastrar como Empresa.\nRedirecionado ao menu principal...");
-                inicio();
+                System.out.println("Sua busca encontrou a seguinte empresa:\n" + empresaRetornada);
+                
+                int opcaoAvancada = 0;
+                while (opcaoAvancada < 1 || opcaoAvancada > 4) {
+                    opcaoAvancada = t.leInt("Selecione o que deseja fazer com a empresa " + empresaRetornada.getNome() + ":\n1) Marcar interesse\n2) Desmarcar interesse\n3) Imprimir serviços\n4) Voltar");
+                }
+                
+                if (opcaoAvancada == 1) {
+                    if (marcarInteresse(empresaRetornada)) {
+                        System.out.println(empresaRetornada.getNome() + " incluída em sua lista de interesse. \nRedirecionado ao Menu de Cliente...");
+                        menuCliente();
+                    } else {
+                        System.out.println("ERRO: não foi possível incluir empresa em sua lista de interesse, lista está cheia ou já tinha esta empresa.\nRedirecionado ao menu principal...");
+                        menuCliente();
+                    }
+                } else if (opcaoAvancada == 2) {
+                    if (desmarcarInteresse(empresaRetornada)) {
+                        System.out.println(empresaRetornada.getNome() + " removida de sua lista de interesse. \nRedirecionado ao Menu de Cliente...");
+                        menuCliente();
+                    } else {
+                        System.out.println("ERRO: não foi possível remover empresa de sua lista de interesse, já não estava nela.\nRedirecionado ao menu principal...");
+                        menuCliente();
+                    }
+                } else if (opcaoAvancada == 3) {
+                    if (empresaRetornada.getServicos() == null) {
+                        System.out.println("ERRO: não foi possível ler lista de serviços.\nRedirecionado ao Menu de Cliente...");
+                        menuCliente();
+                    } else {
+                        System.out.println("Os serviços oferecidos pela empresa " + empresaRetornada.getNome() + " são:\n");
+                        for (int i=0; i < empresaRetornada.getServicos().length; i++)
+                            if (empresaRetornada.getServicos()[i] != null)
+                                System.out.println(empresaRetornada.getServicos()[i]);
+                            
+                        System.out.println("Redirecionado ao Menu de Cliente...");
+                        menuCliente();
+                    }
+                } else if (opcaoAvancada == 4) {
+                    System.out.println("Redirecionado ao Menu de Cliente...");
+                    menuCliente();
+                }
             }
-        
+        } else if (opcao == 2) {
+            String tipoEmpresa = t.leString("Digite o tipo da empresa que deseja buscar (MEI ou LTDA):");
+            Empresa[] empresasTipoEncontradas = buscaEmpresaPorTipo(tipoEmpresa);
+            
+            if (empresasTipoEncontradas == null) {
+                System.out.println("Nenhuma empresa encontrada com o tipo informado.\nRedirecionado ao Menu de Cliente...");
+                menuCliente();
+            } else {
+                System.out.println("Sua busca encontrou as seguintes empresas:\n");
+                for (int i = 0; i < empresasTipoEncontradas.length; i++) {
+                    if (empresasTipoEncontradas[i] != null) {
+                        System.out.println(empresasTipoEncontradas[i]);
+                    }
+                }
+                System.out.println("Redirecionado ao Menu de Cliente...");
+                menuCliente();
+            }
+        } else if (opcao == 3) {
+            if (clienteLogado.getInteresseEmpresas() == null) {
+                System.out.println("ERRO: não foi possível ler lista de interesse.\nRedirecionado ao Menu de Cliente...");
+                menuCliente();
+            } else {
+                System.out.println("Lista de empresas marcadas com interesse:");
+                for (int i=0; i < clienteLogado.getInteresseEmpresas().length; i++)
+                    if (clienteLogado.getInteresseEmpresas()[i] != null)
+                        System.out.println(clienteLogado.getInteresseEmpresas()[i]);
+                    
+                System.out.println("Redirecionado ao Menu de Cliente...");
+                menuCliente();
+            }
         } else if (opcao == 4) {
             System.out.println("Logout como Cliente realizado.\nRedirecionado ao menu principal...");
             clienteLogado = null;
