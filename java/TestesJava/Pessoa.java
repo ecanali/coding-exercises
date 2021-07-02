@@ -35,4 +35,9 @@ public class Pessoa {
     public void setSexo(char novoSexo) {
         sexo = novoSexo;
     }
+    
+    public String toString() {
+        String texto = "[Nome] " + nome + "\n[Idade] " + idade + "\n[Sexo] " + sexo;
+        return texto;
+    }
 }

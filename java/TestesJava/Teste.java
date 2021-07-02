@@ -21,5 +21,7 @@ public class Teste {
         char opcao = Teclado.leChar("Digite sua opção:");
         
         System.out.println("A quantidade informada é: " + quantidade);
+        
+        System.out.println("A altura informada é: " + altura);
     }
 }

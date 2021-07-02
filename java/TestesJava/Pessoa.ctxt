@@ -14,4 +14,6 @@ comment6.params=novaIdade
 comment6.target=void\ setIdade(int)
 comment7.params=novoSexo
 comment7.target=void\ setSexo(char)
-numComments=8
+comment8.params=
+comment8.target=java.lang.String\ toString()
+numComments=9
