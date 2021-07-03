@@ -11,6 +11,11 @@ public class MinhasInformacoes {
         System.out.println("Nome: " + nome);
         System.out.println("Altura: " + altura);
         System.out.println("Data de nascimento: " + dataNascimento + " - RG: " + rg);
-        System.out.println("Endereço: " + rua + " - Número: " + numero + " - Complemento: " + complemento);        
+        System.out.println("Endereço: " + rua + " - Número: " + numero + " - Complemento: " + complemento);
+        
+        System.out.println("Nome: " + nome);
+        System.out.println("Altura: " + altura);
+        System.out.println("Data de nascimento: " + dataNascimento + " - RG: " + rg);
+        System.out.println("Endereço: " + rua + " - Número: " + numero + " - Complemento: " + complemento);
     }
 }
