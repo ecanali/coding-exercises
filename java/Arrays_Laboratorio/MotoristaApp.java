@@ -43,4 +43,8 @@ public class MotoristaApp{
     public void setAvaliacoes(double[] avaliacoes){
         this.avaliacoes = avaliacoes;
     }
+    
+    public String toString() {
+        return "[Nome do Motorista] " + nome;
+    }
 }

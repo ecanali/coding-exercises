@@ -14,4 +14,6 @@ comment6.params=
 comment6.target=double[]\ getAvaliacoes()
 comment7.params=avaliacoes
 comment7.target=void\ setAvaliacoes(double[])
-numComments=8
+comment8.params=
+comment8.target=java.lang.String\ toString()
+numComments=9
