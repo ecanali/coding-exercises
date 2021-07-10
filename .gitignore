@@ -2,3 +2,6 @@
 .vscode/
 __pycache__/
 to-do.txt
+*.pyc
+instance/
+venv/
