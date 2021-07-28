@@ -1,6 +1,6 @@
 import java.io.*;
 
-/** Classe que permite fazer leitura de dados do tecladeo */
+/** Classe que permite fazer leitura de dados do teclado */
 
 public class Teclado
 {

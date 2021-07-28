@@ -1,6 +1,6 @@
 #BlueJ class context
 comment0.target=Teclado
-comment0.text=Classe\ que\ permite\ fazer\ leitura\ de\ dados\ do\ tecladeo
+comment0.text=Classe\ que\ permite\ fazer\ leitura\ de\ dados\ do\ teclado
 comment1.params=
 comment1.target=int\ leInt()
 comment1.text=\n\ \ \ \ \ \ \ \ L\u00EA\ um\ inteiro.\n\ \ \ \ \ \ \ \ @return\ int\n
