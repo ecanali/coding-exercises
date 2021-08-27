@@ -3,23 +3,6 @@
 
 const booksByCategory = [
     {
-        category: "Riqueza",
-        books: [
-            {
-                title: "Os segredos da mente milionária",
-                author: "T. Harv Eker"
-            },
-            {
-                title: "O homem mais rico da Babilônia",
-                author: "George S. Clason"
-            },
-            {
-                title: "Pai rico, pai pobre",
-                author: "Robert T. Kiyosaki e Sharon L. Lechter"
-            }
-        ]
-    },
-    {
         category: "Inteligência Emocional",
         books: [
             {
@@ -33,6 +16,23 @@ const booksByCategory = [
             {
                 title: "Os 7 hábitos das pessoas altamente eficazes",
                 author: "Stephen R. Covey"
+            }
+        ]
+    },
+    {
+        category: "Riqueza",
+        books: [
+            {
+                title: "Os segredos da mente milionária",
+                author: "T. Harv Eker"
+            },
+            {
+                title: "O homem mais rico da Babilônia",
+                author: "George S. Clason"
+            },
+            {
+                title: "Pai rico, pai pobre",
+                author: "Robert T. Kiyosaki e Sharon L. Lechter"
             }
         ]
     }
